@@ -1,5 +1,6 @@
 import React from 'react';
 import './NoticationPopup.scss';
+import {string} from 'prop-types';
 
 const NotificationPopup = ({
   firstName = 'John Doe',
@@ -39,6 +40,13 @@ const NotificationPopup = ({
   );
 };
 
-NotificationPopup.propTypes = {};
+NotificationPopup.propTypes = {
+  firstName: string,
+  city: string,
+  country: string,
+  productName: string,
+  timestamp: string,
+  productImage: string
+};
 
 export default NotificationPopup;

@@ -34,7 +34,6 @@ export default function Home() {
                 <Text as="span">Fullscreen</Text>
                 <Button onClick={() => openFullscreen('/samples')}>Samples</Button>
                 <Button onClick={() => openFullscreen('/settings')}>Settings</Button>
-                <Button url="/fullscreen-page-a">Fullscreen page a</Button>
               </InlineStack>
             </Card>
           </BlockStack>
