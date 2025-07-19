@@ -32,7 +32,7 @@ export default function Home() {
             <Card>
               <InlineStack gap="200" blockAlign="center">
                 <Text as="span">Fullscreen</Text>
-                <Button onClick={() => openFullscreen('/samples')}>Samples</Button>
+                <Button onClick={() => openFullscreen('/Notifications')}>Samples</Button>
                 <Button onClick={() => openFullscreen('/settings')}>Settings</Button>
               </InlineStack>
             </Card>

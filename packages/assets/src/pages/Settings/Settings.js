@@ -1,11 +1,12 @@
 import React from 'react';
 import {
+  Page,
+  Layout,
   BlockStack,
   Card,
   Checkbox,
   ChoiceList,
   InlineStack,
-  Page,
   RangeSlider,
   SkeletonBodyText,
   Text
@@ -24,7 +25,7 @@ import useEditApi from '@assets/hooks/api/useEditApi';
 export default function Settings() {
   const {loading, data: input, setData: setInput, setLoading} = useFetchApi({
     url: '/settings',
-    defaultSetting
+    defaultData: defaultSetting
   });
   const {editing: editingSetting, handleEdit: saveSetting} = useEditApi({
     url: '/settings'
@@ -81,172 +82,176 @@ export default function Settings() {
         }
       ]}
     >
-      <BlockStack gap="500">
-        {/* Position Settings */}
-        <Card>
-          <BlockStack gap="400">
+      <Layout>
+        <Layout.Section>
+          <BlockStack gap="500">
+            {/* Position Settings */}
+            <Card>
+              <BlockStack gap="400">
+                {loading ? (
+                  <>
+                    <Text as="h2" variant="headingMd">
+                      Position Settings
+                    </Text>
+
+                    <Text as="p" variant="bodyMd" fontWeight="semibold">
+                      Choose notification position:
+                    </Text>
+
+                    <InlineStack gap="400" align="start">
+                      {[...Array(4)].map((_, idx) => (
+                        <BlockStack gap="200" key={idx}>
+                          {/* Skeleton for radio button */}
+                          <SkeletonBodyText lines={1} />
+
+                          {/* Skeleton for preview box */}
+                          <div
+                            style={{
+                              width: '80px',
+                              height: '60px',
+                              border: '1px solid #000',
+                              borderRadius: '6px',
+                              position: 'relative'
+                            }}
+                          >
+                            <div
+                              style={{
+                                width: '20px',
+                                height: '10px',
+                                backgroundColor: '#000',
+                                position: 'absolute',
+                                ...(idx === 0 && {bottom: '6px', left: '6px'}),
+                                ...(idx === 1 && {bottom: '6px', right: '6px'}),
+                                ...(idx === 2 && {top: '6px', left: '6px'}),
+                                ...(idx === 3 && {top: '6px', right: '6px'})
+                              }}
+                            />
+                          </div>
+                        </BlockStack>
+                      ))}
+                    </InlineStack>
+
+                    <SkeletonBodyText lines={1} />
+                    <SkeletonBodyText lines={1} />
+                  </>
+                ) : (
+                  <>
+                    <Text as="h2" variant="headingMd">
+                      Position Settings
+                    </Text>
+
+                    <Text as="p" variant="bodyMd" fontWeight="semibold">
+                      Choose notification position:
+                    </Text>
+
+                    <InlineStack gap="400" align="start">
+                      {positionChoices.map(choice => (
+                        <div key={choice.value} style={{minWidth: '120px'}}>
+                          <ChoiceList
+                            title=""
+                            tone="magic"
+                            choices={[choice]}
+                            selected={input.position === choice.value ? [choice.value] : []}
+                            onChange={() => handleChangeInput('position', choice.value)}
+                          />
+                        </div>
+                      ))}
+                    </InlineStack>
+
+                    <Checkbox
+                      label="Hide time ago"
+                      checked={input.hideTimeAgo}
+                      onChange={() => handleChangeInput('hideTimeAgo', !input.hideTimeAgo)}
+                    />
+                    <Checkbox
+                      label="Truncate content text"
+                      checked={input.truncateProductName}
+                      onChange={() =>
+                        handleChangeInput('truncateProductName', !input.truncateProductName)
+                      }
+                      helpText="if your product name is too long for one line, it will be truncated with '...'"
+                    />
+                  </>
+                )}
+              </BlockStack>
+            </Card>
+            {/* Timing Settings */}
             {loading ? (
-              <>
-                <Text as="h2" variant="headingMd">
-                  Position Settings
-                </Text>
+              <Card>
+                <BlockStack gap="400">
+                  {/* Section Title */}
+                  <Text as="h2" variant="headingMd">
+                    Timing Settings
+                  </Text>
 
-                <Text as="p" variant="bodyMd" fontWeight="semibold">
-                  Choose notification position:
-                </Text>
-
-                <InlineStack gap="400" align="start">
+                  {/* Each timing setting */}
                   {[...Array(4)].map((_, idx) => (
-                    <BlockStack gap="200" key={idx}>
-                      {/* Skeleton for radio button */}
+                    <BlockStack key={idx} gap="200">
+                      {/* Slider placeholder */}
                       <SkeletonBodyText lines={1} />
 
-                      {/* Skeleton for preview box */}
-                      <div
-                        style={{
-                          width: '80px',
-                          height: '60px',
-                          border: '1px solid #000',
-                          borderRadius: '6px',
-                          position: 'relative'
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: '20px',
-                            height: '10px',
-                            backgroundColor: '#000',
-                            position: 'absolute',
-                            ...(idx === 0 && {bottom: '6px', left: '6px'}),
-                            ...(idx === 1 && {bottom: '6px', right: '6px'}),
-                            ...(idx === 2 && {top: '6px', left: '6px'}),
-                            ...(idx === 3 && {top: '6px', right: '6px'})
-                          }}
-                        />
-                      </div>
+                      {/* Description below the slider */}
+                      <SkeletonBodyText lines={1} />
                     </BlockStack>
                   ))}
-                </InlineStack>
-
-                <SkeletonBodyText lines={1} />
-                <SkeletonBodyText lines={1} />
-              </>
+                </BlockStack>
+              </Card>
             ) : (
-              <>
-                <Text as="h2" variant="headingMd">
-                  Position Settings
-                </Text>
+              <Card>
+                <BlockStack gap="400">
+                  <Text as="h2" variant="headingMd">
+                    Timing Settings
+                  </Text>
 
-                <Text as="p" variant="bodyMd" fontWeight="semibold">
-                  Choose notification position:
-                </Text>
+                  <RangeSlider
+                    label="Time before first popup (seconds)"
+                    value={input.firstDelay}
+                    onChange={value => handleChangeInput('firstDelay', value)}
+                    min={1}
+                    max={30}
+                    step={1}
+                    output
+                    helpText={`First popup will visible after ${input.firstDelay} seconds`}
+                  />
 
-                <InlineStack gap="400" align="start">
-                  {positionChoices.map(choice => (
-                    <div key={choice.value} style={{minWidth: '120px'}}>
-                      <ChoiceList
-                        title=""
-                        tone="magic"
-                        choices={[choice]}
-                        selected={input.position === choice.value ? [choice.value] : []}
-                        onChange={() => handleChangeInput('position', choice.value)}
-                      />
-                    </div>
-                  ))}
-                </InlineStack>
+                  <RangeSlider
+                    label="Popup duration (seconds)"
+                    value={input.duration}
+                    onChange={value => handleChangeInput('duration', value)}
+                    min={1}
+                    max={30}
+                    step={1}
+                    output
+                    helpText={`Popup will stay visible for ${input.duration} seconds`}
+                  />
 
-                <Checkbox
-                  label="Hide time ago"
-                  checked={input.hideTimeAgo}
-                  onChange={() => handleChangeInput('hideTimeAgo', !input.hideTimeAgo)}
-                />
-                <Checkbox
-                  label="Truncate content text"
-                  checked={input.truncateProductName}
-                  onChange={() =>
-                    handleChangeInput('truncateProductName', !input.truncateProductName)
-                  }
-                  helpText="if your product name is too long for one line, it will be truncated with '...'"
-                />
-              </>
+                  <RangeSlider
+                    label="Delay between popups (seconds)"
+                    value={input.popsInterval}
+                    onChange={value => handleChangeInput('popsInterval', value)}
+                    min={1}
+                    max={60}
+                    step={1}
+                    output
+                    helpText={`Wait ${input.popsInterval} seconds before showing next popup`}
+                  />
+
+                  <RangeSlider
+                    label="Maximum popups per session"
+                    value={input.maxPopsDisplay}
+                    onChange={value => handleChangeInput('maxPopsDisplay', value)}
+                    min={1}
+                    max={50}
+                    step={1}
+                    output
+                    helpText={`Show maximum ${input.maxPopsDisplay} popups per session`}
+                  />
+                </BlockStack>
+              </Card>
             )}
           </BlockStack>
-        </Card>
-        {/* Timing Settings */}
-        {loading ? (
-          <Card>
-            <BlockStack gap="400">
-              {/* Section Title */}
-              <Text as="h2" variant="headingMd">
-                Timing Settings
-              </Text>
-
-              {/* Each timing setting */}
-              {[...Array(4)].map((_, idx) => (
-                <BlockStack key={idx} gap="200">
-                  {/* Slider placeholder */}
-                  <SkeletonBodyText lines={1} />
-
-                  {/* Description below the slider */}
-                  <SkeletonBodyText lines={1} />
-                </BlockStack>
-              ))}
-            </BlockStack>
-          </Card>
-        ) : (
-          <Card>
-            <BlockStack gap="400">
-              <Text as="h2" variant="headingMd">
-                Timing Settings
-              </Text>
-
-              <RangeSlider
-                label="Time before first popup (seconds)"
-                value={input.firstDelay}
-                onChange={value => handleChangeInput('firstDelay', value)}
-                min={1}
-                max={30}
-                step={1}
-                output
-                helpText={`First popup will visible after ${input.firstDelay} seconds`}
-              />
-
-              <RangeSlider
-                label="Popup duration (seconds)"
-                value={input.duration}
-                onChange={value => handleChangeInput('duration', value)}
-                min={1}
-                max={30}
-                step={1}
-                output
-                helpText={`Popup will stay visible for ${input.duration} seconds`}
-              />
-
-              <RangeSlider
-                label="Delay between popups (seconds)"
-                value={input.popsInterval}
-                onChange={value => handleChangeInput('popsInterval', value)}
-                min={1}
-                max={60}
-                step={1}
-                output
-                helpText={`Wait ${input.popsInterval} seconds before showing next popup`}
-              />
-
-              <RangeSlider
-                label="Maximum popups per session"
-                value={input.maxPopsDisplay}
-                onChange={value => handleChangeInput('maxPopsDisplay', value)}
-                min={1}
-                max={50}
-                step={1}
-                output
-                helpText={`Show maximum ${input.maxPopsDisplay} popups per session`}
-              />
-            </BlockStack>
-          </Card>
-        )}
-      </BlockStack>
+        </Layout.Section>
+      </Layout>
     </Page>
   );
 }

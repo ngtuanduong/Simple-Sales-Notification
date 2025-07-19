@@ -2,7 +2,7 @@ import {Firestore} from '@google-cloud/firestore';
 
 const firestore = new Firestore();
 
-const collection = firestore.collection('setting');
+const collection = firestore.collection('notifications');
 
 export async function createOne(data) {
   const created = await collection.add({
@@ -15,7 +15,7 @@ export async function createOne(data) {
 export async function get({id, limit = 10, offset = 0}) {
   const snapshot = await collection
     .where('shopId', '==', id)
-    .orderBy('createdAt', 'desc')
+    .orderBy('timestamp', 'desc')
     .limit(limit)
     .offset(offset)
     .get();

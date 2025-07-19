@@ -8,8 +8,8 @@ export const navigationLinks = [
     destination: '/settings'
   },
   {
-    label: 'Tables',
-    destination: '/tables'
+    label: 'Notifications',
+    destination: '/notifications'
   },
   {
     label: 'Optional Scopes',
