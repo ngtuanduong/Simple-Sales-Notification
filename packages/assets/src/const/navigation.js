@@ -1,7 +1,7 @@
 export const navigationLinks = [
   {
-    label: 'Samples',
-    destination: '/samples'
+    label: 'Dashboard',
+    destination: '/'
   },
   {
     label: 'Settings',
