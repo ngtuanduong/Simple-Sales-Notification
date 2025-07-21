@@ -1,12 +1,12 @@
 import React from 'react';
 import {Text, ResourceItem, InlineStack, BlockStack} from '@shopify/polaris';
 import PropTypes from 'prop-types';
+import moment from 'moment-timezone';
 
 const NotificationItem = ({data}) => {
-  const formattedDate =
-    data.timestamp && data.timestamp._seconds
-      ? new Date(data.timestamp._seconds * 1000).toLocaleString()
-      : 'Unknown time';
+  const formattedDate = moment(data.timestamp)
+    .tz('Asia/Ho_Chi_Minh')
+    .format('HH:mm DD/MM/YYYY');
   return (
     <ResourceItem id={data.id}>
       <InlineStack
@@ -19,7 +19,7 @@ const NotificationItem = ({data}) => {
         {/* Image + Info */}
         <InlineStack gap="300" blockAlign="center">
           <img
-            src={data.productImage}
+            src={data.productImage || '/image/placeholder-image.jpg'}
             alt={data.productName}
             width={48}
             height={48}

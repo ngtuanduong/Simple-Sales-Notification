@@ -7,7 +7,14 @@ const collection = firestore.collection('settings');
 
 export async function getOne(id) {
   const doc = await collection.doc(id).get();
-  return {id: doc.id, ...formatDateFields(doc.data())};
+  return {id: id, ...formatDateFields(doc.data())};
+}
+export async function getOneByDomain(shopDomain) {
+  const doc = await collection
+    .where('shopDomain', '==', shopDomain)
+    .limit(1)
+    .get();
+  return {shopDomain: shopDomain, ...formatDateFields(doc.docs[0].data())};
 }
 
 export async function updateOne(id, data) {

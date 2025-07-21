@@ -62,6 +62,22 @@
         "destination": "/embed.html"
       },
       {
+        "source": "/webhook/**",
+        "function": "webhook"
+      },
+      {
+        "source": "/clientApi/**",
+        "function": "clientApi"
+      },
+      {
+        "source": "/scripttag/**",
+        "destination": "avada-sale-pop.min.html"
+      },
+      {
+        "source": "/image/**",
+        "destination": "image"
+      },
+      {
         "source": "**",
         "destination": "/standalone.html"
       }

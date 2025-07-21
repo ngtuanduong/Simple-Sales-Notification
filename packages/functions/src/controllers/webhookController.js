@@ -1,41 +1,32 @@
-import crypto from 'crypto';
-import {getCurrentShopData} from '@functions/helpers/auth';
+import {getShopByShopifyDomain} from '@functions/repositories/shopRepository';
+import {createOne} from '@functions/repositories/notificationRepository';
 
-export async function handleOrderCreated(ctx) {
-  console.log(ctx);
+export async function listenNewOrder(ctx) {
   try {
-    const hmacHeader = ctx.request.headers['x-shopify-hmac-sha256'];
-    const rawBody = ctx.request.rawBody;
-
-    const shopData = getCurrentShopData(ctx);
-
-    const secret = process.env.SHOPIFY_WEBHOOK_SECRET;
-    if (!secret) {
-      ctx.status = 500;
-      ctx.body = {success: false, message: 'Missing webhook secret'};
-      return;
-    }
-    const digest = crypto
-      .createHmac('sha256', secret)
-      .update(rawBody, 'utf8')
-      .digest('base64');
-
-    if (digest !== hmacHeader) {
-      ctx.status = 401;
-      ctx.body = 'Unauthorized - Invalid HMAC';
-      return;
-    }
-    const order = JSON.parse(rawBody);
-    console.log(order);
-    // await saveOrder(order);
-    ctx.body = {data, shopData, success: true};
-  } catch (error) {
-    console.error('Error in handleOrderCreated:', error);
-    ctx.status = 500;
-    ctx.body = {
-      success: false,
-      message: 'Internal server error',
-      error: error instanceof Error ? error.message : 'Unknown error'
+    const shopDomain = ctx.request.header['x-shopify-shop-domain'];
+    const order = ctx.req.body;
+    const shop = await getShopByShopifyDomain(shopDomain);
+    const notification = {
+      shopId: shop.id || '',
+      shopName: shop.name || '',
+      shopDomain: shop.domain || '',
+      firstName: order.customer?.first_name || '',
+      city: order.customer?.default_address.city || '',
+      productName: order.line_items[0]?.name || '',
+      country: order.customer?.default_address.country || '',
+      productId: order.line_items[0].product_id || '',
+      timestamp: order.created_at || '',
+      productImage: order.line_items[0]?.image?.src || ''
     };
+    await createOne(notification);
+
+    return (ctx.body = {
+      success: true
+    });
+  } catch (e) {
+    console.error(e);
+    return (ctx.body = {
+      success: false
+    });
   }
 }

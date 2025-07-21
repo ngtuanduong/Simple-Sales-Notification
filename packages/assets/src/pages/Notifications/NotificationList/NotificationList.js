@@ -4,15 +4,16 @@ import NotificationItem from '../NotificationItem/NotificationItem';
 import useFetchApi from '@assets/hooks/api/useFetchApi';
 const NotificationList = () => {
   const {loading, data: notifications, setData: updateNotifications, setLoading} = useFetchApi({
-    url: '/notifications'
+    url: '/notifications/many'
   });
+  console.log(notifications);
   return (
     <ResourceList
       resourceName={{singular: 'Notification', plural: 'Notifications'}}
       items={notifications}
       showHeader
       renderItem={item => <NotificationItem data={item} />}
-      loading={loading} // optional: if you're fetching data
+      loading={loading}
       emptyState={
         <BlockStack gap="200" alignment="center">
           <Text as={'p'} variant="headingSm">
