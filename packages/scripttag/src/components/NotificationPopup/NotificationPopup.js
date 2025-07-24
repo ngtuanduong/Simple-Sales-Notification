@@ -5,10 +5,11 @@ import PropTypes from 'prop-types';
 const NotificationPopup = ({
   productName = 'Puffer Jacket With Hidden Hood',
   timeAgo = 'a day ago',
-  productImage = 'https://picsum.photos/200'
+  productImage = 'https://picsum.photos/200',
+  style = {}
 }) => {
   return (
-    <div className="Avava-SP__Wrapper fadeInUp animated">
+    <div className="Avava-SP__Wrapper fadeInUp animated" style={style}>
       <div className="Avava-SP__Inner">
         <div className="Avava-SP__Container">
           <a href="#" className={'Avava-SP__LinkWrapper'}>
@@ -19,9 +20,7 @@ const NotificationPopup = ({
               }}
             />
             <div className="Avada-SP__Content">
-              <div className={'Avada-SP__Title'}>
-                A new product is available!
-              </div>
+              <div className={'Avada-SP__Title'}>A new product is available!</div>
               <div className={'Avada-SP__Subtitle'}>{productName}</div>
               <div className={'Avada-SP__Footer'}>
                 {timeAgo}{' '}
@@ -40,7 +39,8 @@ const NotificationPopup = ({
 NotificationPopup.propTypes = {
   productName: PropTypes.string,
   timeAgo: PropTypes.string,
-  productImage: PropTypes.string
+  productImage: PropTypes.string,
+  style: PropTypes.object
 };
 
 export default NotificationPopup;

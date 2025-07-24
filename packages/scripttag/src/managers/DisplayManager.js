@@ -2,8 +2,6 @@ import {insertAfter} from '../helpers/insertHelpers.js';
 import {render} from 'preact';
 import React from 'preact/compat';
 import NotificationPopup from '../components/NotificationPopup/NotificationPopup.js';
-import {settings} from '../../.eslintrc';
-
 export default class DisplayManager {
   constructor() {
     this.notifications = [];
@@ -42,22 +40,25 @@ export default class DisplayManager {
 
   display({notification}) {
     const container = document.querySelector('#Avada-SalePop');
-
-    container.style = this.setPosition(settings.position || 'bottom-left');
-    render(React.createElement(NotificationPopup, notification), container);
+    const positionStyle = this.setPosition(this.settings.position || 'bottom-left');
+    const popup = React.createElement(NotificationPopup, {
+      ...notification,
+      style: positionStyle
+    });
+    render(popup, container);
   }
   setPosition = position => {
     switch (position) {
       case 'bottom-left':
-        return {bottom: '10px', left: '10px'};
+        return {bottom: '15px', left: '15px'};
       case 'bottom-right':
-        return {bottom: '10px', right: '10px'};
+        return {bottom: '15px', right: '15px'};
       case 'top-left':
-        return {top: '10px', left: '10px'};
+        return {top: '15px', left: '15px'};
       case 'top-right':
-        return {top: '10px', right: '10px'};
+        return {top: '15px', right: '15px'};
       default:
-        return {bottom: '10px', left: '10px'};
+        return {bottom: '15px', left: '15px'};
     }
   };
 
