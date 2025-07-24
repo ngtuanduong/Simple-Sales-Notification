@@ -21,7 +21,7 @@ export default class DisplayManager {
 
     // display logic
     for (let i = 0; i < notifications.length; i++) {
-      await this.display({notification: notifications[i],setting: settings});
+      await this.display({notification: notifications[i], setting: settings});
 
       await this.sleep(this.settings.duration || 5);
 
