@@ -1,22 +1,20 @@
 import {getShopByShopifyDomain} from '@functions/repositories/shopRepository';
 import {createOne} from '@functions/repositories/notificationRepository';
 
-export async function listenNewOrder(ctx) {
+export async function listenNewProduct(ctx) {
   try {
     const shopDomain = ctx.request.header['x-shopify-shop-domain'];
-    const order = ctx.req.body;
+    const product = ctx.req.body;
     const shop = await getShopByShopifyDomain(shopDomain);
     const notification = {
       shopId: shop.id || '',
       shopName: shop.name || '',
       shopDomain: shop.domain || '',
-      firstName: order.customer?.first_name || '',
-      city: order.customer?.default_address.city || '',
-      productName: order.line_items[0]?.name || '',
-      country: order.customer?.default_address.country || '',
-      productId: order.line_items[0].product_id || '',
-      timestamp: order.created_at || '',
-      productImage: order.line_items[0]?.image?.src || ''
+      type: 'new_product',
+      productName: product.title || '',
+      productId: product.id || '',
+      timestamp: product.created_at || '',
+      productImage: product.image?.src || ''
     };
     await createOne(notification);
 
@@ -28,5 +26,34 @@ export async function listenNewOrder(ctx) {
     return (ctx.body = {
       success: false
     });
+  }
+}
+
+export async function listenNewCheckout(ctx) {
+  try {
+    const shopDomain = ctx.request.header['x-shopify-shop-domain'];
+    const checkout = ctx.request.body;
+
+    const shop = await getShopByShopifyDomain(shopDomain);
+
+    const lineItem = checkout?.line_items?.[0];
+
+    const notification = {
+      shopId: shop.id || '',
+      shopName: shop.name || '',
+      shopDomain: shop.domain || '',
+      productName: lineItem?.title || '',
+      productId: lineItem?.product_id || '',
+      productImage: lineItem?.image?.src || '',
+      country: checkout?.shipping_address?.country || '',
+      timestamp: checkout?.created_at || new Date().toISOString()
+    };
+
+    await createOne(notification);
+
+    ctx.body = {success: true};
+  } catch (e) {
+    console.error('Error in listenNewCheckout:', e);
+    ctx.body = {success: false};
   }
 }

@@ -1,5 +1,5 @@
 (function() {
-  const BASE_URL = 'https://frankfurt-sea-ski-assessment.trycloudflare.com/scripttag';
+  const BASE_URL = 'https://we-bathrooms-legitimate-seasonal.trycloudflare.com/scripttag';
 
   const scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';

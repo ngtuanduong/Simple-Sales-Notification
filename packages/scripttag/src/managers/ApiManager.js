@@ -8,7 +8,7 @@ export default class ApiManager {
   getApiData = async () => {
     const shopifyDomain = window.Shopify.shop;
     const {notifications, settings} = await makeRequest(
-      `licensing-av-pakistan-linda.trycloudflare.com/clientApi/notifications?shop=${shopifyDomain}`
+      `https://violation-apparent-papua-singing.trycloudflare.com/clientApi/notifications?shop=${shopifyDomain}`
     );
 
     return {notifications, settings};

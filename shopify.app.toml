@@ -3,7 +3,7 @@
 client_id = "49da59fd7b0db0b1e1966e6198967ce0"
 name = "Avada-app-test"
 handle = "avada-app-test-10"
-application_url = "https://frankfurt-sea-ski-assessment.trycloudflare.com/auth/shopify"
+application_url = "https://we-bathrooms-legitimate-seasonal.trycloudflare.com/auth/shopify"
 embedded = true
 
 [webhooks]
@@ -11,10 +11,10 @@ api_version = "2025-07"
 
 [auth]
 redirect_urls = [
-  "https://frankfurt-sea-ski-assessment.trycloudflare.com/auth/shopify/callback",
-  "https://frankfurt-sea-ski-assessment.trycloudflare.com/authSa/shopify/callback",
-  "https://frankfurt-sea-ski-assessment.trycloudflare.com/auth/shopify/embed/callback",
-  "https://frankfurt-sea-ski-assessment.trycloudflare.com/auth/shopify/embed/callback/updateScopes",
+  "https://we-bathrooms-legitimate-seasonal.trycloudflare.com/auth/shopify/callback",
+  "https://we-bathrooms-legitimate-seasonal.trycloudflare.com/authSa/shopify/callback",
+  "https://we-bathrooms-legitimate-seasonal.trycloudflare.com/auth/shopify/embed/callback",
+  "https://we-bathrooms-legitimate-seasonal.trycloudflare.com/auth/shopify/embed/callback/updateScopes",
   "https://localhost:3000/auth/shopify/callback",
   "https://localhost:3000/authSa/shopify/callback",
   "https://localhost:3000/auth/shopify/embed/callback"
@@ -25,3 +25,4 @@ embedded = false
 
 [build]
 automatically_update_urls_on_dev = true
+include_config_on_deploy = true

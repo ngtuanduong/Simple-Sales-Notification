@@ -4,7 +4,27 @@
   color: #333;
   position: fixed;
   top: 15px;
+  right: 15px;
+}
+
+.top-left {
+  top: 15px;
   left: 15px;
+}
+
+.top-right {
+  top: 15px;
+  right: 15px;
+}
+
+.bottom-left {
+  bottom: 15px;
+  left: 15px;
+}
+
+.bottom-right {
+  bottom: 15px;
+  right: 15px;
 }
 
 .Avava-SP__Wrapper .Avava-SP__LinkWrapper {

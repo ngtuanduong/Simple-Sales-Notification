@@ -1,5 +1,7 @@
 import {getByDomain} from '@functions/repositories/notificationRepository';
 import {getOneByDomain} from '@functions/repositories/settingRepository';
+import moment from 'moment';
+
 /**
  *
  * @param ctx
@@ -7,14 +9,22 @@ import {getOneByDomain} from '@functions/repositories/settingRepository';
  */
 export async function getNotifications(ctx) {
   try {
-    const shopDomain = ctx.query.domain;
-    const notifications = await getByDomain(shopDomain);
-    const setting = getOneByDomain(shopDomain);
+    const shopDomain = ctx.req.query.shop;
+    const notifications = await getByDomain({domain: shopDomain});
+
+    const updatedNotifications = notifications.map(notification => {
+      return {
+        ...notification,
+        timeAgo: moment(notification.timestamp).fromNow()
+      };
+    });
+    const setting = await getOneByDomain(shopDomain);
     const data = {
-      ...setting,
-      ...notifications
+      settings: setting,
+      notifications: updatedNotifications
     };
-    ctx.body = {data, shopDomain, success: true};
+
+    ctx.body = {...data};
   } catch (e) {
     console.error(e);
     ctx.body = {data: [], shopDomain: '', success: false};

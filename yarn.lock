@@ -131,6 +131,7 @@ __metadata:
   resolution: "@avada/app@workspace:."
   dependencies:
     "@avada/console": "npm:1.0.0"
+    "@avada/core": "npm:3.3.19"
     "@shopify/cli": "npm:3.80.7-alpha.10"
     babel-jest: "npm:^24.9.0"
     concurrently: "npm:^7.6.0"

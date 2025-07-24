@@ -13,6 +13,7 @@
     "logs": "./node_modules/.bin/firebase functions:log",
     "emulators": "npx kill-port 8085 &&  ./node_modules/.bin/firebase emulators:start --only hosting,functions",
     "predeploy": "yarn workspace @avada/assets run production && yarn workspace @avada/functions run production",
+    "development": "yarn workspace @avada/assets run development && yarn workspace @avada/functions run development",
     "eslint-fix": "npm --prefix packages/assets/ run eslint-fix && npm --prefix packages/functions/ run eslint-fix",
     "start-dev-embed": "concurrently \"yarn workspace @avada/functions run watch\"",
     "start-dev": "concurrently \"yarn workspace @avada/assets run watch\" \"yarn workspace @avada/functions run watch\"",
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "babel-jest": "^24.9.0",
+    "cross-env": "^7.0.3",
     "delay-cli": "2.0.0",
     "eslint": "^6.3.0",
     "eslint-config-google": "^0.14.0",
@@ -41,12 +43,16 @@
     "eslint-plugin-react": "^7.16.0",
     "firebase-tools": "^12.9.1",
     "jest": "^24.9.0",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "webpack": "^5.100.2",
+    "webpack-cli": "^6.0.1"
   },
   "dependencies": {
     "@avada/console": "1.0.0",
+    "@avada/core": "3.3.19",
     "@shopify/cli": "3.80.7-alpha.10",
-    "concurrently": "^7.6.0"
+    "concurrently": "^7.6.0",
+    "moment-timezone": "^0.6.0"
   },
   "packageManager": "yarn@4.9.1"
 }
