@@ -1,5 +1,5 @@
 (function() {
-  const BASE_URL = 'https://antibodies-speaks-cake-jersey.trycloudflare.com/scripttag';
+  const BASE_URL = 'https://volume-roughly-technical-albania.trycloudflare.com/scripttag';
 
   const scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';

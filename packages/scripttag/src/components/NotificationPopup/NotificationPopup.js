@@ -3,12 +3,9 @@ import './NoticationPopup.scss';
 import PropTypes from 'prop-types';
 
 const NotificationPopup = ({
-  firstName = 'John Doe',
-  city = 'New York',
-  country = 'United States',
   productName = 'Puffer Jacket With Hidden Hood',
-  relativeDate = 'a day ago',
-  productImage = 'http://paris.mageplaza.com/images/shop/single/big-1.jpg'
+  timeAgo = 'a day ago',
+  productImage = 'https://picsum.photos/200'
 }) => {
   return (
     <div className="Avava-SP__Wrapper fadeInUp animated">
@@ -23,11 +20,11 @@ const NotificationPopup = ({
             />
             <div className="Avada-SP__Content">
               <div className={'Avada-SP__Title'}>
-                {firstName} in {city}, {country}
+                A new product is available!
               </div>
-              <div className={'Avada-SP__Subtitle'}>purchased {productName}</div>
+              <div className={'Avada-SP__Subtitle'}>{productName}</div>
               <div className={'Avada-SP__Footer'}>
-                {relativeDate}{' '}
+                {timeAgo}{' '}
                 <span className="uni-blue">
                   <i className="fa fa-check" aria-hidden="true" /> by Avada
                 </span>
@@ -41,11 +38,8 @@ const NotificationPopup = ({
 };
 
 NotificationPopup.propTypes = {
-  firstName: PropTypes.string,
-  city: PropTypes.string,
-  country: PropTypes.string,
   productName: PropTypes.string,
-  relativeDate: PropTypes.string,
+  timeAgo: PropTypes.string,
   productImage: PropTypes.string
 };
 

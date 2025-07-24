@@ -11,12 +11,14 @@ export async function getOne(id) {
 }
 export async function getOneByDomain(shopDomain) {
   const doc = await collection
-    .where('shopDomain', '==', shopDomain)
+    .where('domain', '==', shopDomain)
     .limit(1)
     .get();
   return {shopDomain: shopDomain, ...formatDateFields(doc.docs[0].data())};
 }
 
-export async function updateOne(id, data) {
-  return collection.doc(id).set({...data, updatedAt: new Date()}, {merge: true});
+export async function updateOne(shopData, data) {
+  return collection
+    .doc(shopData.id)
+    .set({...data, domain: shopData.domain, updatedAt: new Date()}, {merge: true});
 }

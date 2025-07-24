@@ -2,6 +2,7 @@ import {insertAfter} from '../helpers/insertHelpers.js';
 import {render} from 'preact';
 import React from 'preact/compat';
 import NotificationPopup from '../components/NotificationPopup/NotificationPopup.js';
+import {settings} from '../../.eslintrc';
 
 export default class DisplayManager {
   constructor() {
@@ -13,21 +14,52 @@ export default class DisplayManager {
     this.settings = settings;
     this.insertContainer();
 
-    // Your display logic here
+    // Delay before first pop
+    if (settings.firstDelay) {
+      await this.sleep(settings.firstDelay);
+    }
 
-    // Sample display first one
-    await this.display({notification: notifications[0]});
+    // display logic
+    for (let i = 0; i < notifications.length; i++) {
+      await this.display({notification: notifications[i],setting: settings});
+
+      await this.sleep(this.settings.duration || 5);
+
+      this.fadeOut();
+
+      await this.sleep(this.settings.popsInterval || 2);
+    }
+  }
+
+  sleep(s) {
+    return new Promise(resolve => setTimeout(resolve, s * 1000));
   }
 
   fadeOut() {
     const container = document.querySelector('#Avada-SalePop');
-    container.innerHTML = '';
+    render(null, container);
   }
 
   display({notification}) {
     const container = document.querySelector('#Avada-SalePop');
+
+    container.style = this.setPosition(settings.position || 'bottom-left');
     render(React.createElement(NotificationPopup, notification), container);
   }
+  setPosition = position => {
+    switch (position) {
+      case 'bottom-left':
+        return {bottom: '10px', left: '10px'};
+      case 'bottom-right':
+        return {bottom: '10px', right: '10px'};
+      case 'top-left':
+        return {top: '10px', left: '10px'};
+      case 'top-right':
+        return {top: '10px', right: '10px'};
+      default:
+        return {bottom: '10px', left: '10px'};
+    }
+  };
 
   insertContainer() {
     const popupEl = document.createElement('div');

@@ -1,6 +1,6 @@
 import App from 'koa';
 import 'isomorphic-fetch';
-import {contentSecurityPolicy, shopifyAuth} from '@avada/core';
+import {contentSecurityPolicy, getShopByShopifyDomain, shopifyAuth} from '@avada/core';
 import shopifyConfig from '@functions/config/shopify';
 import render from 'koa-ejs';
 import path from 'path';
@@ -8,9 +8,7 @@ import createErrorHandler from '@functions/middleware/errorHandler';
 import firebase from 'firebase-admin';
 import appConfig from '@functions/config/app';
 import shopifyOptionalScopes from '@functions/config/shopifyOptionalScopes';
-import {getShopByShopifyDomain} from '@functions/repositories/shopRepository';
-import {initShopify} from '@functions/services/shopifyService';
-
+import {createWebhooks, initShopify} from '@functions/services/shopifyService';
 if (firebase.apps.length === 0) {
   firebase.initializeApp();
 }
@@ -54,41 +52,48 @@ app.use(
       });
     },
     // afterInstall: async ctx => {
-    //   const {
-    //     state: {shop}
-    //   } = useStore();
-    //   const orders = await api(
-    //     `https://${shop.shopDomain}/admin/api/2025-07/orders.json?status=any`
-    //   );
-    //   const notification = await api(
-    //     `/notifications`,
+    //   try {
+    //     const shopData = getCurrentShopData(ctx);
+    //     const shopify = await initShopify(shopData);
     //
-    //   );
+    //     // Fetch last 30 orders from Shopify
+    //     const products = await shopify.product.list({
+    //       limit: 30,
+    //       order: 'created_at desc'
+    //     });
+    //
+    //     await create(products);
+    //     console.log(`Successfully created ${products.length} notifications for shop}`);
+    //   } catch (error) {
+    //     console.error('Error in afterInstall hook:', error);
+    //     throw error;
+    //   }
     // },
+
     afterLogin: async ctx => {
       try {
-        const shopifyDomain = ctx.request.header['x-shopify-shop-domain'];
-        const shop = await getShopByShopifyDomain(shopifyDomain);
-        if (appConfig.baseUrl !== shop.domain && appConfig.baseUrl.includes('trycloudflare')) {
-          const shopify = initShopify(shop);
-          console.log('Recreating webhook url', shop.domain);
-          await createWebhooks(shopify, appConfig.baseUrl);
-        }
-      } catch (e) {
-        console.log(e);
+        const shopDomain = ctx.state.shopify.shop;
+        const shop = await getShopByShopifyDomain(shopDomain);
+        const shopify = initShopify(shop); // dùng shop.accessToken trong đây
+        const accessToken = shopify.options.accessToken;
+        console.log('shopify: ', shopify);
+        console.log('accessToken:', accessToken);
+        console.log('Recreating webhook url', shopDomain);
+        await createWebhooks(shopDomain, accessToken);
+
+        shopify.webhook.list().then(webhooks => {
+          console.log('webhooks: ', webhooks);
+        })
+      } catch (err) {
+        const body = err.response?.body;
+        const status = err.response?.statusCode;
+        console.error('Webhook create failed:', {status, body});
+        throw err;
       }
     },
     optionalScopes: shopifyOptionalScopes
   }).routes()
 );
-
-const createWebhooks = async (shopify, baseUrl) => {
-  return shopify.webhook.create({
-    topic: 'orders/create',
-    address: `https://${baseUrl}/api/webhooks/orders`,
-    format: 'json'
-  });
-};
 
 // Handling all errors
 app.on('error', err => {

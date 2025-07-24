@@ -41,7 +41,9 @@
     "eslint-plugin-react": "^7.16.0",
     "firebase-tools": "^12.9.1",
     "jest": "^24.9.0",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "webpack": "^5.100.2",
+    "webpack-cli": "^6.0.1"
   },
   "dependencies": {
     "@avada/console": "1.0.0",
