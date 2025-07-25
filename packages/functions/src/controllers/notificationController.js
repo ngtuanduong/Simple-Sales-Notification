@@ -15,8 +15,17 @@ export async function getOneNotification(ctx) {
 export async function getNotifications(ctx) {
   try {
     const shopId = getCurrentShop(ctx);
-    const data = await get({shopId: shopId});
-    ctx.body = {data, shopId, success: true};
+    // Lấy query params từ request
+    const {after, before, limit, hasCount} = ctx.query;
+    // Gọi repository với các tham số phân trang
+    const data = await get({
+      after,
+      before,
+      limit: limit ? parseInt(limit) : 10,
+      hasCount: hasCount === 'true',
+      shopId
+    });
+    ctx.body = {...data, shopId, success: true};
   } catch (e) {
     console.error(e);
     ctx.body = {data: [], shopData: {}, success: false};

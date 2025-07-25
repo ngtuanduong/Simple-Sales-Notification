@@ -1,16 +1,19 @@
 import React from 'react';
 import {BlockStack, ResourceList, Text} from '@shopify/polaris';
 import NotificationItem from '../NotificationItem/NotificationItem';
-import useFetchApi from '@assets/hooks/api/useFetchApi';
+import usePaginate from '@assets/hooks/api/usePaginate';
+
 const NotificationList = () => {
-  const {loading, data: notifications, setData: updateNotifications, setLoading} = useFetchApi({
-    url: '/notifications/many'
+  const {data, loading, pageInfo, nextPage, prevPage} = usePaginate({
+    url: '/notifications/many',
+    defaultLimit: 10,
+    initQueries: {hasCount: true}
   });
-  console.log(notifications);
+
   return (
     <ResourceList
       resourceName={{singular: 'Notification', plural: 'Notifications'}}
-      items={notifications}
+      items={data}
       showHeader
       renderItem={item => <NotificationItem data={item} />}
       loading={loading}
@@ -24,6 +27,12 @@ const NotificationList = () => {
           </Text>
         </BlockStack>
       }
+      pagination={{
+        onNext: nextPage,
+        onPrevious: prevPage,
+        hasNext: !!pageInfo?.hasNext,
+        hasPrevious: !!pageInfo?.hasPre
+      }}
     />
   );
 };

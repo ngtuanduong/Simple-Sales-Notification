@@ -9,6 +9,7 @@ import firebase from 'firebase-admin';
 import appConfig from '@functions/config/app';
 import shopifyOptionalScopes from '@functions/config/shopifyOptionalScopes';
 import {createWebhooks, initShopify} from '@functions/services/shopifyService';
+import {create} from '@functions/repositories/notificationRepository';
 if (firebase.apps.length === 0) {
   firebase.initializeApp();
 }
@@ -51,30 +52,48 @@ app.use(
         success: true
       });
     },
-    // afterInstall: async ctx => {
-    //   try {
-    //     const shopData = getCurrentShopData(ctx);
-    //     const shopify = await initShopify(shopData);
-    //
-    //     // Fetch last 30 orders from Shopify
-    //     const products = await shopify.product.list({
-    //       limit: 30,
-    //       order: 'created_at desc'
-    //     });
-    //
-    //     await create(products);
-    //     console.log(`Successfully created ${products.length} notifications for shop}`);
-    //   } catch (error) {
-    //     console.error('Error in afterInstall hook:', error);
-    //     throw error;
-    //   }
-    // },
+    afterInstall: async ctx => {
+      try {
+        const shopDomain = ctx.state.shopify.shop;
+        const shop = await getShopByShopifyDomain(shopDomain);
+        const shopify = initShopify(shop);
+        // Fetch last 30 orders from Shopify
+        const products = await shopify.product.list({
+          limit: 30,
+          order: 'created_at desc'
+        });
+
+        // add notifications
+        await create(
+          products.map(product => ({
+            productId: product.id,
+            productName: product.title,
+            productImage: product.image?.src || 'https://picsum.photos/200',
+            timestamp: product.created_at,
+            shopDomain: shopDomain,
+            shopId: shop.id,
+            shopName: shop.name
+          }))
+        );
+        console.log(`Successfully created ${products.length} notifications for shop}`);
+
+        // register scriptTag
+        await shopify.scriptTag.create({
+          event: 'onload',
+          src: 'https://cdn.jsdelivr.net/gh/ngtuanduong/testV2-6/avada-sale-pop.min.js'
+        });
+        console.log(`Successfully register scriptTag for shop ${shopDomain}}`);
+      } catch (error) {
+        console.error('Error in afterInstall hook:', error);
+        throw error;
+      }
+    },
 
     afterLogin: async ctx => {
       try {
         const shopDomain = ctx.state.shopify.shop;
         const shop = await getShopByShopifyDomain(shopDomain);
-        const shopify = initShopify(shop); // dùng shop.accessToken trong đây
+        const shopify = initShopify(shop);
         const accessToken = shopify.options.accessToken;
         console.log('shopify: ', shopify);
         console.log('accessToken:', accessToken);
@@ -83,7 +102,7 @@ app.use(
 
         shopify.webhook.list().then(webhooks => {
           console.log('webhooks: ', webhooks);
-        })
+        });
       } catch (err) {
         const body = err.response?.body;
         const status = err.response?.statusCode;

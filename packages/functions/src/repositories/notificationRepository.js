@@ -1,5 +1,5 @@
 import {Firestore} from '@google-cloud/firestore';
-import {batchCreate} from '@functions/repositories/helper';
+import {batchCreate, paginateQuery} from '@functions/repositories/helper';
 
 const firestore = new Firestore();
 
@@ -14,14 +14,19 @@ export async function create(dataList) {
   await batchCreate({firestore: firestore, collection: collection, data: dataList});
 }
 
-export async function get({shopId, limit = 10, offset = 0}) {
-  const snapshot = await collection
-    .where('shopId', '==', shopId)
-    .orderBy('timestamp', 'desc')
-    .limit(limit)
-    .offset(offset)
-    .get();
-  return snapshot.docs.map(doc => doc.data());
+export async function get({after, before, limit, withDocs, hasCount, shopId}) {
+  let queriedRef = collection;
+  if (shopId) {
+    queriedRef = queriedRef.where('shopId', '==', shopId);
+  }
+  queriedRef = queriedRef.orderBy('timestamp', 'desc'); // nhớ phải orderBy để phân trang
+
+  return await paginateQuery({
+    queriedRef,
+    collection,
+    query: {after, before, limit, withDocs, hasCount},
+    pickedFields: ['productName', 'productImage', 'timestamp']
+  });
 }
 
 export async function getByDomain({domain, limit = 10, offset = 0}) {
