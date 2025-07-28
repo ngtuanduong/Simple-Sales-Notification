@@ -1,19 +1,22 @@
 import {getShopByShopifyDomain} from '@functions/repositories/shopRepository';
 import {createOne} from '@functions/repositories/notificationRepository';
 
-export async function listenNewProduct(ctx) {
+export async function listenNewOrder(ctx) {
   try {
     const shopDomain = ctx.request.header['x-shopify-shop-domain'];
-    const product = ctx.req.body;
+    const order = ctx.req.body;
     const shop = await getShopByShopifyDomain(shopDomain);
     const notification = {
       shopId: shop.id || '',
       shopName: shop.name || '',
       shopDomain: shop.domain || '',
-      productName: product.title || '',
-      productId: product.id || '',
-      timestamp: product.created_at || '',
-      productImage: product.image?.src || ''
+      firstName: order.customer?.first_name || '',
+      city: order.customer?.default_address.city || '',
+      productName: order.line_items[0]?.name || '',
+      country: order.customer?.default_address.country || '',
+      productId: order.line_items[0].product_id || '',
+      timestamp: order.created_at || '',
+      productImage: order.line_items[0]?.image?.src || ''
     };
     await createOne(notification);
 

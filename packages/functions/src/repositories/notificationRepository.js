@@ -16,27 +16,25 @@ export async function create(dataList) {
 
 export async function get({after, before, limit, withDocs, hasCount, shopId}) {
   let queriedRef = collection;
-  if (shopId) {
-    queriedRef = queriedRef.where('shopId', '==', shopId);
-  }
-  queriedRef = queriedRef.orderBy('timestamp', 'desc'); // nhớ phải orderBy để phân trang
+  queriedRef = queriedRef.where('shopId', '==', shopId);
+  queriedRef = queriedRef.orderBy('created_at', 'desc');
 
   return await paginateQuery({
     queriedRef,
     collection,
-    query: {after, before, limit, withDocs, hasCount},
-    pickedFields: ['productName', 'productImage', 'timestamp']
+    query: {after, before, limit, withDocs, hasCount}
   });
 }
 
-export async function getByDomain({domain, limit = 10, offset = 0}) {
-  const snapshot = await collection
-    .where('shopDomain', '==', domain)
-    .orderBy('timestamp', 'desc')
-    .limit(limit)
-    .offset(offset)
-    .get();
-  return snapshot.docs.map(doc => doc.data());
+export async function getByDomain({after, before, limit, withDocs, hasCount, shopDomain}) {
+  let queriedRef = collection;
+  queriedRef = queriedRef.where('shopDomain', '==', shopDomain);
+  queriedRef = queriedRef.orderBy('created_at', 'desc');
+  return await paginateQuery({
+    queriedRef,
+    collection,
+    query: {after, before, limit, withDocs, hasCount}
+  });
 }
 
 export async function getOne(id) {

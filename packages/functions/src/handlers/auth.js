@@ -8,8 +8,15 @@ import createErrorHandler from '@functions/middleware/errorHandler';
 import firebase from 'firebase-admin';
 import appConfig from '@functions/config/app';
 import shopifyOptionalScopes from '@functions/config/shopifyOptionalScopes';
-import {createWebhooks, initShopify} from '@functions/services/shopifyService';
-import {create} from '@functions/repositories/notificationRepository';
+import {
+  getShopifyByDomain,
+  createDefaultSetting,
+  createWebhooks,
+  registerScriptTag,
+  syncOrders,
+  initShopify
+} from '@functions/services/shopifyService';
+import Shopify from 'shopify-api-node';
 if (firebase.apps.length === 0) {
   firebase.initializeApp();
 }
@@ -56,40 +63,16 @@ app.use(
       try {
         const shopDomain = ctx.state.shopify.shop;
         const shop = await getShopByShopifyDomain(shopDomain);
-        const shopify = initShopify(shop);
-        // Fetch last 30 orders from Shopify
-        const products = await shopify.product.list({
-          limit: 30,
-          order: 'created_at desc'
+        const shopifyTmp = initShopify(shop);
+        const shopify = new Shopify({
+          shopName: shopDomain,
+          accessToken: shopifyTmp.options.accessToken
         });
-
-        // add notifications
-        await create(
-          products.map(product => ({
-            productId: product.id,
-            productName: product.title,
-            productImage: product.image?.src || 'https://picsum.photos/200',
-            timestamp: product.created_at,
-            shopDomain: shopDomain,
-            shopId: shop.id,
-            shopName: shop.name
-          }))
-        );
-        console.log(`Successfully created ${products.length} notifications for shop}`);
-
-        // register scriptTag
-        await shopify.scriptTag.create({
-          event: 'onload',
-          src: 'https://cdn.jsdelivr.net/gh/ngtuanduong/testV2-6/avada-sale-pop.min.js'
-        });
-
-        // const shop = ...await
-        //   await Promise.all([
-        //     syncOrders(),
-        //     createDefaultSetting(),
-        //     registerScripptag()
-        //   ])
-        console.log(`Successfully register scriptTag for shop ${shopDomain}}`);
+        await Promise.all([
+          syncOrders({shopDomain, shopify, shop}),
+          createDefaultSetting(shop),
+          registerScriptTag(shopDomain, shopify)
+        ]);
       } catch (error) {
         console.error('Error in afterInstall hook:', error);
         throw error;
@@ -100,16 +83,13 @@ app.use(
       try {
         const shopDomain = ctx.state.shopify.shop;
         const shop = await getShopByShopifyDomain(shopDomain);
-        const shopify = initShopify(shop);
-        const accessToken = shopify.options.accessToken;
-        console.log('shopify: ', shopify);
-        console.log('accessToken:', accessToken);
-        console.log('Recreating webhook url', shopDomain);
-        await createWebhooks(shopDomain, accessToken);
-
-        shopify.webhook.list().then(webhooks => {
-          console.log('webhooks: ', webhooks);
+        const shopifyTmp = initShopify(shop);
+        const shopify = new Shopify({
+          shopName: shopDomain,
+          accessToken: shopifyTmp.options.accessToken
         });
+        console.log('Recreating webhook url', shopDomain);
+        await createWebhooks(shopify);
       } catch (err) {
         const body = err.response?.body;
         const status = err.response?.statusCode;

@@ -6,7 +6,7 @@ import moment from 'moment-timezone';
 const NotificationItem = ({data}) => {
   const formattedDate = moment(data.timestamp)
     .tz('Asia/Ho_Chi_Minh')
-    .fromNow();
+    .format('HH:mm DD/MM/YYYY');
   return (
     <ResourceItem id={data.id}>
       <InlineStack
@@ -35,7 +35,7 @@ const NotificationItem = ({data}) => {
               {data.productName}
             </Text>
             <Text variant="bodySm" tone="subdued">
-              was created
+              {data.firstName}
             </Text>
           </BlockStack>
         </InlineStack>

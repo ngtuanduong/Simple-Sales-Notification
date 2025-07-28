@@ -4,6 +4,6 @@ import * as webhookController from '@functions/controllers/webhookController';
 export default function webhookRouter() {
   const router = new Router({prefix: '/webhook'});
 
-  router.post('/products/create', webhookController.listenNewProduct);
+  router.post('/orders/new', webhookController.listenNewOrder);
   return router;
 }
