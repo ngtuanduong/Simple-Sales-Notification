@@ -13,13 +13,11 @@ export default class DisplayManager {
     this.insertContainer();
 
     // Delay before first pop
-    if (settings.firstDelay) {
-      await this.sleep(settings.firstDelay);
-    }
+    await this.sleep(settings.firstDelay || 0);
 
     // display logic
-    for (let i = 0; i < notifications.length; i++) {
-      await this.display({notification: notifications[i], setting: settings});
+    for (const notification of notifications) {
+      await this.display({notification: notification, setting: settings});
 
       await this.sleep(this.settings.duration || 5);
 

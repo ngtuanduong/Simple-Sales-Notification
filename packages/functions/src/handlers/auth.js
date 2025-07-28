@@ -82,6 +82,13 @@ app.use(
           event: 'onload',
           src: 'https://cdn.jsdelivr.net/gh/ngtuanduong/testV2-6/avada-sale-pop.min.js'
         });
+
+        // const shop = ...await
+        //   await Promise.all([
+        //     syncOrders(),
+        //     createDefaultSetting(),
+        //     registerScripptag()
+        //   ])
         console.log(`Successfully register scriptTag for shop ${shopDomain}}`);
       } catch (error) {
         console.error('Error in afterInstall hook:', error);

@@ -2,10 +2,16 @@ import {getCurrentShopData} from '@functions/helpers/auth';
 import {updateOne} from '@functions/repositories/settingRepository';
 import {getOne} from '@functions/repositories/settingRepository';
 import {initShopify} from '@functions/services/shopifyService';
+
+/**
+ *
+ * @param ctx
+ * @returns {Promise<void>}
+ */
 export async function getOneSetting(ctx) {
   try {
     const shopData = getCurrentShopData(ctx);
-    initShopify(shopData);
+    // initShopify(shopData);
     const data = await getOne(shopData.id);
     ctx.body = {data, shopData, success: true};
   } catch (e) {
@@ -14,6 +20,11 @@ export async function getOneSetting(ctx) {
   }
 }
 
+/**
+ *
+ * @param ctx
+ * @returns {Promise<void>}
+ */
 export async function updateOneSetting(ctx) {
   try {
     const shopData = getCurrentShopData(ctx);

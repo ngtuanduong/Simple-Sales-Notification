@@ -1,4 +1,4 @@
-import React from 'react';
+ import React from 'react';
 import {
   Page,
   Layout,
@@ -66,6 +66,14 @@ export default function Settings() {
       />
     )
   }));
+
+  // const tabs = [
+  //   {id: 'position', title: 'Position Settings', body: (
+  //
+  //     )},
+  // ];
+
+  // tabs[selectedTab].body
 
   return (
     <Page
