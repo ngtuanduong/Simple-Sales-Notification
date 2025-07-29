@@ -11,7 +11,7 @@ import {initShopify} from '@functions/services/shopifyService';
 export async function getOneSetting(ctx) {
   try {
     const shopData = getCurrentShopData(ctx);
-    // initShopify(shopData);
+    initShopify(shopData);
     const data = await getOne(shopData.id);
     ctx.body = {data, shopData, success: true};
   } catch (e) {

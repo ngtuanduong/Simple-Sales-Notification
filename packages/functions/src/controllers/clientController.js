@@ -1,4 +1,4 @@
-import {getByDomain} from '@functions/repositories/notificationRepository';
+import {get, getByDomain} from '@functions/repositories/notificationRepository';
 import {getOneByDomain} from '@functions/repositories/settingRepository';
 import moment from 'moment';
 
@@ -9,16 +9,16 @@ import moment from 'moment';
  */
 export async function getNotifications(ctx) {
   try {
-    const shopDomain = ctx.req.query.shop;
-    const notifications = await getByDomain({domain: shopDomain});
-
+    const {shop} = ctx.query;
+    const notifications = await getByDomain(shop);
+    console.log(notifications);
     const updatedNotifications = notifications.map(notification => {
       return {
         ...notification,
-        timeAgo: moment(notification.timestamp).fromNow()
+        timeAgo: moment(notification.created_at).fromNow()
       };
     });
-    const setting = await getOneByDomain(shopDomain);
+    const setting = await getOneByDomain(shop);
     const data = {
       settings: setting,
       notifications: updatedNotifications

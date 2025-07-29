@@ -17,7 +17,7 @@ export default class DisplayManager {
 
     // display logic
     for (const notification of notifications) {
-      await this.display({notification: notification, setting: settings});
+      await this.display(notification);
 
       await this.sleep(this.settings.duration || 5);
 
@@ -36,29 +36,14 @@ export default class DisplayManager {
     render(null, container);
   }
 
-  display({notification}) {
+  display(notification) {
     const container = document.querySelector('#Avada-SalePop');
-    const positionStyle = this.setPosition(this.settings.position || 'bottom-left');
     const popup = React.createElement(NotificationPopup, {
       ...notification,
-      style: positionStyle
+      settings: this.settings
     });
     render(popup, container);
   }
-  setPosition = position => {
-    switch (position) {
-      case 'bottom-left':
-        return {bottom: '15px', left: '15px'};
-      case 'bottom-right':
-        return {bottom: '15px', right: '15px'};
-      case 'top-left':
-        return {top: '15px', left: '15px'};
-      case 'top-right':
-        return {top: '15px', right: '15px'};
-      default:
-        return {bottom: '15px', left: '15px'};
-    }
-  };
 
   insertContainer() {
     const popupEl = document.createElement('div');

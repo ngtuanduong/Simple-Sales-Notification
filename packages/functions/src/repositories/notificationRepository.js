@@ -26,15 +26,14 @@ export async function get({after, before, limit, withDocs, hasCount, shopId}) {
   });
 }
 
-export async function getByDomain({after, before, limit, withDocs, hasCount, shopDomain}) {
-  let queriedRef = collection;
-  queriedRef = queriedRef.where('shopDomain', '==', shopDomain);
-  queriedRef = queriedRef.orderBy('created_at', 'desc');
-  return await paginateQuery({
-    queriedRef,
-    collection,
-    query: {after, before, limit, withDocs, hasCount}
-  });
+export async function getByDomain(shopDomain) {
+  const docs = await collection
+    .where('shopDomain', '==', shopDomain)
+    .orderBy('created_at', 'desc')
+    .get();
+  return docs.docs.map(doc => ({
+    ...doc.data()
+  }));
 }
 
 export async function getOne(id) {

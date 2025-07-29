@@ -6,10 +6,32 @@ const NotificationPopup = ({
   productName = 'Puffer Jacket With Hidden Hood',
   timeAgo = 'a day ago',
   productImage = 'https://picsum.photos/200',
-  style = {}
+  city,
+  settings = {}
 }) => {
+  const setPosition = position => {
+    switch (position) {
+      case 'bottom-left':
+        return {bottom: '15px', left: '15px'};
+      case 'bottom-right':
+        return {bottom: '15px', right: '15px'};
+      case 'top-left':
+        return {top: '15px', left: '15px'};
+      case 'top-right':
+        return {top: '15px', right: '15px'};
+      default:
+        return {bottom: '15px', left: '15px'};
+    }
+  };
+
+  const truncateString = (str, n) => {
+    return str?.length > n ? str.substring(0, n - 1) + '...' : str;
+  };
   return (
-    <div className="Avava-SP__Wrapper fadeInUp animated" style={style}>
+    <div
+      className="Avava-SP__Wrapper fadeInUp animated"
+      style={setPosition(settings.position || 'bottom-left')}
+    >
       <div className="Avava-SP__Inner">
         <div className="Avava-SP__Container">
           <a href="#" className={'Avava-SP__LinkWrapper'}>
@@ -20,10 +42,13 @@ const NotificationPopup = ({
               }}
             />
             <div className="Avada-SP__Content">
-              <div className={'Avada-SP__Title'}>A new product is available!</div>
-              <div className={'Avada-SP__Subtitle'}>{productName}</div>
+              <div className={'Avada-SP__Title'}>Someone {city && ' in ' + city}</div>
+              <div className={'Avada-SP__Subtitle'}>
+                Purchased{' '}
+                {settings.truncateProductName ? truncateString(productName, 15) : productName}
+              </div>
               <div className={'Avada-SP__Footer'}>
-                {timeAgo}{' '}
+                {!settings.hideTimeAgo && timeAgo}{' '}
                 <span className="uni-blue">
                   <i className="fa fa-check" aria-hidden="true" /> by Avada
                 </span>
@@ -40,7 +65,8 @@ NotificationPopup.propTypes = {
   productName: PropTypes.string,
   timeAgo: PropTypes.string,
   productImage: PropTypes.string,
-  style: PropTypes.object
+  city: PropTypes.string,
+  settings: PropTypes.object
 };
 
 export default NotificationPopup;

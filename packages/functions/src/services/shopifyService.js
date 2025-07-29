@@ -19,7 +19,7 @@ export const API_VERSION = '2024-04';
 export function initShopify(shopData, apiVersion = API_VERSION) {
   const shopParsedData = prepareShopData(shopData.id, shopData, shopifyConfig.accessTokenKey);
   const {shopifyDomain, accessToken} = shopParsedData;
-
+  console.log('accessToken:', accessToken);
   return new Shopify({
     shopName: shopifyDomain,
     accessToken,
@@ -43,12 +43,12 @@ export async function createWebhooks(shopify) {
   }
 
   const webhooks = await shopify.webhook.list({
-    address: `https://${appConfig.baseUrl}/webhook/products/create`
+    address: `https://${appConfig.baseUrl}/webhook/orders/new`
   });
   if (webhooks.length === 0) {
     return shopify.webhook.create({
-      topic: 'products/create',
-      address: `https://${appConfig.baseUrl}/webhook/products/create`,
+      topic: 'orders/create',
+      address: `https://${appConfig.baseUrl}/webhook/orders/new`,
       format: 'json'
     });
   }
@@ -80,7 +80,7 @@ export async function registerScriptTag(shopDomain, shopify) {
   // register scriptTag
   await shopify.scriptTag.create({
     event: 'onload',
-    src: 'https://cdn.jsdelivr.net/gh/ngtuanduong/testV2-6/avada-sale-pop.min.js'
+    src: 'https://localhost:5000/scripttag/avada-sale-pop.min.js'
   });
   console.log(`Successfully register scriptTag for shop ${shopify.options.shopName}`);
 }
