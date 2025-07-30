@@ -1,12 +1,14 @@
 import React from 'react';
 import './NoticationPopup.scss';
-import PropTypes from 'prop-types';
+import {string, object} from 'prop-types';
 
 const NotificationPopup = ({
+  firstName = 'John Doe',
+  city = 'New York',
+  country = 'United States',
   productName = 'Puffer Jacket With Hidden Hood',
   timeAgo = 'a day ago',
-  productImage = 'https://picsum.photos/200',
-  city,
+  productImage = 'https://cdn.shopify.com/s/files/1/0703/2596/0876/files/Main_0a4e9096-021a-4c1e-8750-24b233166a12.jpg?v=1752746092',
   settings = {
     position: 'bottom-left',
     truncateProductName: false,
@@ -44,11 +46,13 @@ const NotificationPopup = ({
               style={{
                 backgroundImage: `url(${productImage})`
               }}
-            />
+            ></div>
             <div className="Avada-SP__Content">
-              <div className={'Avada-SP__Title'}>Someone {city && ' in ' + city}</div>
+              <div className={'Avada-SP__Title'}>
+                {firstName} in {city}, {country}
+              </div>
               <div className={'Avada-SP__Subtitle'}>
-                Purchased{' '}
+                purchased{' '}
                 {settings.truncateProductName ? truncateString(productName, 15) : productName}
               </div>
               <div className={'Avada-SP__Footer'}>
@@ -66,11 +70,13 @@ const NotificationPopup = ({
 };
 
 NotificationPopup.propTypes = {
-  productName: PropTypes.string,
-  timeAgo: PropTypes.string,
-  productImage: PropTypes.string,
-  city: PropTypes.string,
-  settings: PropTypes.object
+  firstName: string,
+  city: string,
+  country: string,
+  productName: string,
+  timeAgo: string,
+  productImage: string,
+  settings: object
 };
 
 export default NotificationPopup;

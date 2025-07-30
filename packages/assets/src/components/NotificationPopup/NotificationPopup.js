@@ -1,15 +1,22 @@
 import React from 'react';
 import './NoticationPopup.scss';
-import {string} from 'prop-types';
+import {string, object} from 'prop-types';
 
 const NotificationPopup = ({
   firstName = 'John Doe',
   city = 'New York',
   country = 'United States',
   productName = 'Puffer Jacket With Hidden Hood',
-  timestamp = 'a day ago',
-  productImage = 'http://paris.mageplaza.com/images/shop/single/big-1.jpg'
+  timeAgo = 'a day ago',
+  productImage = 'https://cdn.shopify.com/s/files/1/0703/2596/0876/files/Main_0a4e9096-021a-4c1e-8750-24b233166a12.jpg?v=1752746092',
+  settings = {
+    truncateProductName: false,
+    hideTimeAgo: false
+  }
 }) => {
+  const truncateString = (str, n) => {
+    return str?.length > n ? str.substring(0, n - 1) + '...' : str;
+  };
   return (
     <div className="Avava-SP__Wrapper fadeInUp animated">
       <div className="Avava-SP__Inner">
@@ -25,9 +32,12 @@ const NotificationPopup = ({
               <div className={'Avada-SP__Title'}>
                 {firstName} in {city}, {country}
               </div>
-              <div className={'Avada-SP__Subtitle'}>purchased {productName}</div>
+              <div className={'Avada-SP__Subtitle'}>
+                purchased{' '}
+                {settings.truncateProductName ? truncateString(productName, 15) : productName}
+              </div>
               <div className={'Avada-SP__Footer'}>
-                {timestamp}{' '}
+                {!settings.hideTimeAgo && timeAgo}
                 <span className="uni-blue">
                   <i className="fa fa-check" aria-hidden="true" /> by Avada
                 </span>
@@ -45,8 +55,9 @@ NotificationPopup.propTypes = {
   city: string,
   country: string,
   productName: string,
-  timestamp: string,
-  productImage: string
+  timeAgo: string,
+  productImage: string,
+  settings: object
 };
 
 export default NotificationPopup;

@@ -1,0 +1,33 @@
+query Notifications($first: Int!) {
+  orders(first: $first, reverse: true) {
+    edges {
+      node {
+        createdAt
+        customer {
+          firstName
+          defaultAddress {
+            city
+            country
+          }
+        }
+        lineItems(first: 1) {
+          edges {
+            node {
+              name
+              product {
+                id
+                images(first: 1) {
+                  edges {
+                    node {
+                      originalSrc
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

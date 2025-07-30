@@ -7,6 +7,7 @@ import {create} from '@functions/repositories/notificationRepository';
 import {updateOne} from '@functions/repositories/settingRepository';
 import defaultSetting from '@functions/const/defaultSetting';
 import createNotificationObject from '@functions/helpers/createNotificationObject';
+import {loadGraphQL} from '@functions/helpers/graphql/graphqlHelpers';
 export const API_VERSION = '2024-04';
 
 /**
@@ -56,17 +57,19 @@ export async function createWebhooks(shopify) {
 
 /**
  *
- * @param shopDomain
  * @param shopify
  * @param shop
  * @returns {Promise<void>}
  */
-export async function syncOrders({shopDomain, shopify, shop}) {
-  const orders = await shopify.order.list({status: 'any', limit: 30, orderBy: 'created_at DESC'});
-  // add notifications
-  await create(orders.map(order => createNotificationObject({shop, shopDomain, order})));
+export async function syncOrders(shopify, shop) {
+  const query = loadGraphQL('/notifications.graphql');
+  const result = await shopify.graphql(query, {
+    first: 30
+  });
+  console.dir(result, {depth: null});
+  await create(result.orders.edges.map(order => createNotificationObject(shop, order.node)));
   console.log(
-    `Successfully created ${orders.length} notifications for shop ${shopify.options.shopName}`
+    `Successfully created ${result.orders.edges.length} notifications for shop ${shopify.options.shopName}`
   );
 }
 

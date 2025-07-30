@@ -14,7 +14,6 @@ export default class DisplayManager {
 
     // Delay before first pop
     await this.sleep(settings.firstDelay || 0);
-
     // display logic
     for (const notification of notifications) {
       await this.display(notification);

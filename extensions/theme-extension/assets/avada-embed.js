@@ -1,5 +1,5 @@
 (function() {
-  const BASE_URL = 'https://ministers-limitation-evaluate-reverse.trycloudflare.com/scripttag';
+  const BASE_URL = 'https://malawi-detect-context-families.trycloudflare.com/scripttag';
 
   const scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';

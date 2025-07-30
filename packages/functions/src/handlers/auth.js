@@ -9,7 +9,6 @@ import firebase from 'firebase-admin';
 import appConfig from '@functions/config/app';
 import shopifyOptionalScopes from '@functions/config/shopifyOptionalScopes';
 import {
-  getShopifyByDomain,
   createDefaultSetting,
   createWebhooks,
   registerScriptTag,
@@ -69,7 +68,7 @@ app.use(
           accessToken: shopifyTmp.options.accessToken
         });
         await Promise.all([
-          syncOrders({shopDomain, shopify, shop}),
+          syncOrders(shopify, shop),
           createDefaultSetting(shop),
           registerScriptTag(shopDomain, shopify)
         ]);
@@ -83,6 +82,7 @@ app.use(
       try {
         const shopDomain = ctx.state.shopify.shop;
         const shop = await getShopByShopifyDomain(shopDomain);
+        console.log('shop afterlogin: ', shop);
         const shopifyTmp = initShopify(shop);
         const shopify = new Shopify({
           shopName: shopDomain,

@@ -7,7 +7,7 @@ import {routePrefix} from '@assets/config/app';
 import Loading from '@assets/components/Loading';
 import Tables from '@assets/loadables/Tables/Tables';
 import Settings from '@assets/loadables/Settings/Settings';
-import Notifications from '@assets/pages/Notifications/Notifications';
+import Notifications from '@assets/loadables/Notifications/Notifications';
 const FullscreenPageA = React.lazy(() => import('../pages/FullscreenPageA'));
 
 // eslint-disable-next-line react/prop-types

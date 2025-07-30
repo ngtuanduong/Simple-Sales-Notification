@@ -12,7 +12,8 @@ export default {
     'read_products',
     'read_orders',
     'read_script_tags',
-    'write_script_tags'
+    'write_script_tags',
+    'read_customers'
   ],
   accessTokenKey: shopify.access_token_key || 'avada-apps-access-token'
 };
