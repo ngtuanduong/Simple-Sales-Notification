@@ -15,7 +15,7 @@ export default function Display({loading, input, handleChangeInput}) {
         </>
       ) : (
         <>
-          <PositionSetting handleChang eInput={handleChangeInput} input={input} />
+          <PositionSetting handleChangeInput={handleChangeInput} input={input} />
           <TimingSetting handleChangeInput={handleChangeInput} input={input} />
         </>
       )}
