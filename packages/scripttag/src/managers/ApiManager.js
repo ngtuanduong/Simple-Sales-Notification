@@ -10,7 +10,7 @@ export default class ApiManager {
     const {notifications, settings} = await makeRequest(
       `https://localhost:5000/clientApi/notifications?shop=${shopifyDomain}`
     );
-    console.log(notifications, settings);
+
     return {notifications, settings};
   };
 }

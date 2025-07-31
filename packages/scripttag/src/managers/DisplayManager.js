@@ -12,9 +12,10 @@ export default class DisplayManager {
     this.settings = settings;
     this.insertContainer();
 
+    // display logic
+    if (!this.shouldDisplay()) return;
     // Delay before first pop
     await this.sleep(settings.firstDelay || 0);
-    // display logic
     for (const notification of notifications) {
       await this.display(notification);
 
@@ -54,5 +55,21 @@ export default class DisplayManager {
     }
 
     return popupEl;
+  }
+
+  shouldDisplay() {
+    const url = window.location.href;
+
+    const {allowShow = 'all', includedUrls = '', excludedUrls = ''} = this.settings;
+
+    const includedUrlsArray = includedUrls.split('\n');
+    const excludedUrlsArray = excludedUrls.split('\n');
+
+    if (excludedUrlsArray.includes(url)) return false;
+
+    if (allowShow === 'all') return true;
+
+    if (allowShow === 'specific') return includedUrlsArray.includes(url);
+    return false;
   }
 }
