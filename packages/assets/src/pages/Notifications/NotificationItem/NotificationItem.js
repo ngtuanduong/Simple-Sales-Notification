@@ -16,7 +16,6 @@ const NotificationItem = ({data}) => {
         blockAlign="center"
         style={{padding: '12px 0'}}
       >
-        {/* Image + Info */}
         <InlineStack gap="300" blockAlign="center">
           <img
             src={data.productImage || '/image/placeholder-image.jpg'}
@@ -29,19 +28,17 @@ const NotificationItem = ({data}) => {
               boxShadow: '0 1px 4px rgba(0,0,0,0.08)'
             }}
           />
-
           <BlockStack gap="050">
-            <Text variant="bodyMd" fontWeight="medium">
+            <Text as={'p'} variant="bodyMd" fontWeight="medium">
               {data.productName}
             </Text>
-            <Text variant="bodySm" tone="subdued">
-              {data.firstName}
+            <Text as={'p'} variant="bodySm" tone="subdued" >
+              Purchased by {data.firstName}
             </Text>
           </BlockStack>
         </InlineStack>
 
-        {/* Timestamp */}
-        <Text variant="bodySm" tone="subdued">
+        <Text as={'p'} variant="bodySm" tone="subdued">
           {formattedDate}
         </Text>
       </InlineStack>

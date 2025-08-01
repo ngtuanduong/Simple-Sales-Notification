@@ -4,9 +4,10 @@ import {getOne} from '@functions/repositories/settingRepository';
 import {initShopify} from '@functions/services/shopifyService';
 
 /**
- *
- * @param ctx
- * @returns {Promise<void>}
+ * Retrieves settings for the current authenticated shop
+ * Initializes Shopify service and returns formatted settings data
+ * @param {Object} ctx - Koa context object
+ * @returns {Promise<void>} Resolves with shop settings data
  */
 export async function getOneSetting(ctx) {
   try {
@@ -21,9 +22,10 @@ export async function getOneSetting(ctx) {
 }
 
 /**
- *
- * @param ctx
- * @returns {Promise<void>}
+ * Updates settings for the current authenticated shop
+ * Merges new settings with existing data and updates timestamp
+ * @param {Object} ctx - Koa context object
+ * @returns {Promise<void>} Resolves when settings are updated
  */
 export async function updateOneSetting(ctx) {
   try {

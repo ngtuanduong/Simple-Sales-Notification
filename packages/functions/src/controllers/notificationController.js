@@ -1,6 +1,11 @@
 import {getCurrentShop, getCurrentShopData} from '@functions/helpers/auth';
 import {create, createOne, get, getOne} from '@functions/repositories/notificationRepository';
 
+/**
+ * Retrieves a single notification by ID for the current authenticated shop
+ * @param {Object} ctx - Koa context object
+ * @returns {Promise<void>} Resolves with notification data
+ */
 export async function getOneNotification(ctx) {
   try {
     const shopId = getCurrentShopData(ctx);
@@ -12,6 +17,12 @@ export async function getOneNotification(ctx) {
   }
 }
 
+/**
+ * Retrieves paginated notifications for the current authenticated shop
+ * Supports pagination with cursor-based navigation
+ * @param {Object} ctx - Koa context object
+ * @returns {Promise<void>} Resolves with paginated notification data
+ */
 export async function getNotifications(ctx) {
   try {
     const shopId = getCurrentShop(ctx);
@@ -30,6 +41,11 @@ export async function getNotifications(ctx) {
   }
 }
 
+/**
+ * Creates a single notification for the current authenticated shop
+ * @param {Object} ctx - Koa context object
+ * @returns {Promise<void>} Resolves when notification is created
+ */
 export async function createOneNotification(ctx) {
   try {
     const shopId = getCurrentShop(ctx);
@@ -42,6 +58,11 @@ export async function createOneNotification(ctx) {
   }
 }
 
+/**
+ * Creates multiple notifications for the current authenticated shop using batch operations
+ * @param {Object} ctx - Koa context object
+ * @returns {Promise<void>} Resolves when all notifications are created
+ */
 export async function createNotifications(ctx) {
   try {
     const shopId = getCurrentShop(ctx);

@@ -1,6 +1,10 @@
+/**
+ * Creates a notification object from shop and order data
+ * @param {Object} shop - Shop data object
+ * @param {Object} order - Order data from Shopify GraphQL
+ * @returns {Object} Formatted notification object
+ */
 export default function createNotificationObject(shop, order) {
-  console.log('createNotificationObject order: ');
-  console.dir(order, {depth: null});
   return {
     shopId: shop.id,
     shopDomain: shop.domain || '',

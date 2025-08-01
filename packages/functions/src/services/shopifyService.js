@@ -1,4 +1,4 @@
-import {getShopByShopifyDomain, prepareShopData} from '@avada/core';
+import {prepareShopData} from '@avada/core';
 import shopifyConfig from '../config/shopify';
 import Shopify from 'shopify-api-node';
 import {isEmpty} from '@avada/utils';
@@ -20,7 +20,6 @@ export const API_VERSION = '2024-04';
 export function initShopify(shopData, apiVersion = API_VERSION) {
   const shopParsedData = prepareShopData(shopData.id, shopData, shopifyConfig.accessTokenKey);
   const {shopifyDomain, accessToken} = shopParsedData;
-  console.log('accessToken:', accessToken);
   return new Shopify({
     shopName: shopifyDomain,
     accessToken,
@@ -30,9 +29,9 @@ export function initShopify(shopData, apiVersion = API_VERSION) {
 }
 
 /**
- *
+ * Creates webhooks for order notifications
+ * @param {Shopify} shopify - Shopify API instance
  * @returns {Promise<Shopify.IWebhook>}
- * @param shopify
  */
 export async function createWebhooks(shopify) {
   const currentWebhooks = await shopify.webhook.list();
@@ -56,9 +55,9 @@ export async function createWebhooks(shopify) {
 }
 
 /**
- *
- * @param shopify
- * @param shop
+ * Syncs recent orders and creates notifications
+ * @param {Shopify} shopify - Shopify API instance
+ * @param {Object} shop - Shop data object
  * @returns {Promise<void>}
  */
 export async function syncOrders(shopify, shop) {
@@ -74,10 +73,10 @@ export async function syncOrders(shopify, shop) {
 }
 
 /**
- *
+ * Registers script tag for the shop
+ * @param {string} shopDomain - Shop domain
+ * @param {Shopify} shopify - Shopify API instance
  * @returns {Promise<void>}
- * @param shopDomain
- * @param shopify
  */
 export async function registerScriptTag(shopDomain, shopify) {
   // register scriptTag
@@ -89,8 +88,8 @@ export async function registerScriptTag(shopDomain, shopify) {
 }
 
 /**
- *
- * @param shop
+ * Creates default settings for the shop
+ * @param {Object} shop - Shop data object
  * @returns {Promise<void>}
  */
 export async function createDefaultSetting(shop) {
