@@ -82,7 +82,6 @@ app.use(
       try {
         const shopDomain = ctx.state.shopify.shop;
         const shop = await getShopByShopifyDomain(shopDomain);
-        console.log('shop afterlogin: ', shop);
         const shopifyTmp = initShopify(shop);
         const shopify = new Shopify({
           shopName: shopDomain,

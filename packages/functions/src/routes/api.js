@@ -1,5 +1,7 @@
 import Router from 'koa-router';
 import * as shopController from '@functions/controllers/shopController';
+import * as appController from '@functions/controllers/appController';
+
 import * as settingController from '@functions/controllers/settingController';
 import * as notificationController from '@functions/controllers/notificationController';
 import {getApiPrefix} from '@functions/const/app';
@@ -14,5 +16,6 @@ export default function apiRouter(isEmbed = false) {
   router.get('/notifications/many', notificationController.getNotifications);
   router.post('/notifications', notificationController.createOneNotification);
   router.post('/notifications/many', notificationController.createNotifications);
+  router.get('/activation', appController.activation);
   return router;
 }

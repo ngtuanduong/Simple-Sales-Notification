@@ -65,7 +65,6 @@ export async function syncOrders(shopify, shop) {
   const result = await shopify.graphql(query, {
     first: 30
   });
-  console.dir(result, {depth: null});
   await create(result.orders.edges.map(order => createNotificationObject(shop, order.node)));
   console.log(
     `Successfully created ${result.orders.edges.length} notifications for shop ${shopify.options.shopName}`
