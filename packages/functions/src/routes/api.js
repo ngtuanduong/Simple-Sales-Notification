@@ -16,6 +16,7 @@ export default function apiRouter(isEmbed = false) {
   router.get('/notifications/many', notificationController.getNotifications);
   router.post('/notifications', notificationController.createOneNotification);
   router.post('/notifications/many', notificationController.createNotifications);
-  router.get('/activation', appController.activation);
+  router.get('/activation', appController.getActivation);
+  router.get('/activation/toggle', appController.changeActivation);
   return router;
 }

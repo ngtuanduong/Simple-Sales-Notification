@@ -1,7 +1,8 @@
-import React, {useContext, useState} from 'react';
+import React, {useCallback, useContext} from 'react';
 import {Badge, BlockStack, Button, Card, InlineStack, Layout, Page, Text} from '@shopify/polaris';
 import {MaxModalContext} from '@assets/contexts/maxModalContext';
 import useFetchApi from '@assets/hooks/api/useFetchApi';
+import {api} from '@assets/helpers';
 
 /**
  * Render a home page for overview
@@ -11,6 +12,7 @@ import useFetchApi from '@assets/hooks/api/useFetchApi';
  */
 export default function Home() {
   const {openFullscreen} = useContext(MaxModalContext);
+
   const {loading, data, fetchApi} = useFetchApi({
     url: '/activation'
   });
@@ -24,11 +26,13 @@ export default function Home() {
               <InlineStack gap="200" blockAlign="center" align={'space-between'}>
                 <InlineStack gap="200" blockAlign="center">
                   <Text as="span">Turn on/off app in your store</Text>
-                  <Badge tone={data.length > 0 ? 'success' : 'warning'}>
-                    {data.length > 0 ? 'On' : 'Off'}
+                  <Badge tone={data.activation ? 'success' : 'warning'}>
+                    {data.activation ? 'On' : 'Off'}
                   </Badge>
                 </InlineStack>
-                <Button onClick={() => fetchApi()} loading={loading}>Turn {data.length > 0 ? 'off' : 'on'}</Button>
+                <Button onClick={() => fetchApi('/activation/toggle')} loading={loading}>
+                  Turn {data.activation ? 'off' : 'on'}
+                </Button>
               </InlineStack>
             </Card>
             <Card>
