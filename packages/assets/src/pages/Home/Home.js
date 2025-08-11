@@ -1,8 +1,7 @@
-import React, {useCallback, useContext} from 'react';
+import React, {useContext} from 'react';
 import {Badge, BlockStack, Button, Card, InlineStack, Layout, Page, Text} from '@shopify/polaris';
 import {MaxModalContext} from '@assets/contexts/maxModalContext';
 import useFetchApi from '@assets/hooks/api/useFetchApi';
-import {api} from '@assets/helpers';
 
 /**
  * Render a home page for overview
