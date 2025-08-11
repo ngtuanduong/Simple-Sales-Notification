@@ -1,28 +1,10 @@
 import React, {useCallback} from 'react';
-import {
-  Page,
-  Layout,
-  BlockStack,
-  Card,
-  Checkbox,
-  ChoiceList,
-  InlineStack,
-  RangeSlider,
-  SkeletonBodyText,
-  Text,
-  Tabs,
-  Grid
-} from '@shopify/polaris';
+import {Page, Layout, BlockStack, Card, Text, Tabs, Grid} from '@shopify/polaris';
 
 import useFetchApi from '@assets/hooks/api/useFetchApi';
 import defaultSetting from '@assets/const/defaultSetting';
 import useEditApi from '@assets/hooks/api/useEditApi';
 import NotificationPopup from '@assets/components/NotificationPopup/NotificationPopup';
-import SettingSkeleton from '@assets/pages/Settings/SettingSkeleton/PositionSettingSkeleton';
-import TimingSettingSkeleton from '@assets/pages/Settings/SettingSkeleton/TimingSettingSkeleton';
-import TimingSetting from '@assets/pages/Settings/Display/TimingSetting/TimingSetting';
-import PositionSettingSkeleton from '@assets/pages/Settings/SettingSkeleton/PositionSettingSkeleton';
-import PositionSetting from '@assets/pages/Settings/Display/PositionSetting/PositionSetting';
 import Display from '@assets/pages/Settings/Display/Display';
 import Trigger from '@assets/pages/Settings/Trigger/Trigger';
 /**
@@ -33,7 +15,7 @@ export default function Settings() {
     url: '/settings',
     defaultData: defaultSetting
   });
-  const {handleEdit: saveSetting} = useEditApi({
+  const {editing, handleEdit: saveSetting} = useEditApi({
     url: '/settings'
   });
 
@@ -71,8 +53,9 @@ export default function Settings() {
       title="Notification Settings"
       subtitle="Customize your popup notification preferences"
       primaryAction={{
-        content: 'Save Settings',
-        onAction: handleSave
+        content: 'Save',
+        onAction: handleSave,
+        loading: editing
       }}
       secondaryActions={[
         {
