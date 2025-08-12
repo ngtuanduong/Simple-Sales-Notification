@@ -11,14 +11,14 @@ import moment from 'moment';
 export async function getNotifications(ctx) {
   try {
     const {shop} = ctx.query;
-    const notifications = await getByDomain(shop);
+
+    const [notifications, setting] = await Promise.all([getByDomain(shop), getOneByDomain(shop)]);
     const updatedNotifications = notifications.map(notification => {
       return {
         ...notification,
         timeAgo: moment(notification.created_at).fromNow()
       };
     });
-    const setting = await getOneByDomain(shop);
     const data = {
       settings: setting,
       notifications: updatedNotifications
