@@ -4,7 +4,7 @@
  * @param {Object} order - Order data from Shopify GraphQL
  * @returns {Object} Formatted notification object
  */
-export default function createNotificationObject(shop, order) {
+export default function prepareNotification(shop, order) {
   return {
     shopId: shop.id,
     shopDomain: shop.domain || '',
@@ -14,6 +14,6 @@ export default function createNotificationObject(shop, order) {
     productName: order.lineItems.edges[0]?.node.name || '',
     productId: order.lineItems.edges[0].node.product.id || '',
     productImage: order.lineItems.edges[0]?.node.product.images?.edges[0]?.node.originalSrc || '',
-    created_at: order.createdAt || ''
+    createdAt: new Date()
   };
 }

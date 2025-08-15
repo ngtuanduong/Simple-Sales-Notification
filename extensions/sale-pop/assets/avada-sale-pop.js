@@ -1,5 +1,5 @@
 (function() {
-  const BASE_URL = 'https://news-agree-forty-peoples.trycloudflare.com/scripttag';
+    const BASE_URL = 'https://localhost:5000/scripttag';
 
   const scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';

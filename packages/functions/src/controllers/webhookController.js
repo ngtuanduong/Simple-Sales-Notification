@@ -1,5 +1,5 @@
-import {createOne} from '@functions/repositories/notificationRepository';
-import createNotificationObject from '@functions/helpers/createNotificationObject';
+import * as notificationRepository from '@functions/repositories/notificationRepository';
+import prepareNotification from '@functions/helpers/prepareNotification';
 import {initShopify} from '@functions/services/shopifyService';
 import {loadGraphQL} from '@functions/helpers/graphql/graphqlHelpers';
 import {getShopByShopifyDomain} from '@avada/core';
@@ -21,7 +21,7 @@ export async function listenNewOrder(ctx) {
       orderId: order.admin_graphql_api_id
     });
 
-    await createOne(createNotificationObject(shop, notificationGraphql.order));
+    await notificationRepository.createOne(prepareNotification(shop, notificationGraphql.order));
     ctx.body = {data: notificationGraphql, success: true};
   } catch (e) {
     console.error(e);

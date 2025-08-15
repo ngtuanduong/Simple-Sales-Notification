@@ -40,7 +40,7 @@ export async function create(dataList) {
  * @param {boolean} [params.hasCount] - Whether to include total count in response
  * @returns {Promise<Object>} Paginated notification results
  */
-export async function get({after, before, limit, withDocs, hasCount, shopId}) {
+export async function get({shopId, after, before, limit = 10, withDocs, hasCount}) {
   let queriedRef = collection;
   queriedRef = queriedRef.where('shopId', '==', shopId);
   queriedRef = queriedRef.orderBy('created_at', 'desc');
@@ -65,14 +65,4 @@ export async function getByDomain(shopDomain) {
   return docs.docs.map(doc => ({
     ...doc.data()
   }));
-}
-
-/**
- * Retrieves a single notification document by ID
- * @param {string} id - The notification document ID
- * @returns {Promise<Object|null>} The notification document data or null if not found
- */
-export async function getOne(id) {
-  const doc = await collection.doc(id).get();
-  return doc.data();
 }

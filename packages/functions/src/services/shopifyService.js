@@ -3,11 +3,12 @@ import shopifyConfig from '../config/shopify';
 import Shopify from 'shopify-api-node';
 import {isEmpty} from '@avada/utils';
 import appConfig from '../config/app';
-import {create} from '@functions/repositories/notificationRepository';
+import * as notificationRepository from '@functions/repositories/notificationRepository';
 import {updateOne} from '@functions/repositories/settingRepository';
 import defaultSetting from '@functions/const/defaultSetting';
-import createNotificationObject from '@functions/helpers/createNotificationObject';
+import prepareNotification from '@functions/helpers/prepareNotification';
 import {loadGraphQL} from '@functions/helpers/graphql/graphqlHelpers';
+
 export const API_VERSION = '2024-04';
 
 /**
@@ -65,7 +66,9 @@ export async function syncOrders(shopify, shop) {
   const result = await shopify.graphql(query, {
     first: 30
   });
-  await create(result.orders.edges.map(order => createNotificationObject(shop, order.node)));
+  await notificationRepository.create(
+    result.orders.edges.map(order => prepareNotification(shop, order.node))
+  );
   console.log(
     `Successfully created ${result.orders.edges.length} notifications for shop ${shopify.options.shopName}`
   );
@@ -91,7 +94,3 @@ export async function registerScriptTag(shopDomain, shopify) {
  * @param {Object} shop - Shop data object
  * @returns {Promise<void>}
  */
-export async function createDefaultSetting(shop) {
-  await updateOne(shop, defaultSetting);
-  console.log(`Successfully create default setting for shop ${shop.name}`);
-}

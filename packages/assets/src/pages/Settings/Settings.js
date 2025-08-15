@@ -1,16 +1,17 @@
-import React, {useCallback} from 'react';
-import {Page, Layout, BlockStack, Card, Text, Tabs, Grid} from '@shopify/polaris';
-
+import React from 'react';
+import {Page, Layout, BlockStack, Text, Tabs} from '@shopify/polaris';
 import useFetchApi from '@assets/hooks/api/useFetchApi';
 import defaultSetting from '@assets/const/defaultSetting';
 import useEditApi from '@assets/hooks/api/useEditApi';
 import NotificationPopup from '@assets/components/NotificationPopup/NotificationPopup';
 import Display from '@assets/pages/Settings/Display/Display';
 import Trigger from '@assets/pages/Settings/Trigger/Trigger';
-/**
- * @return {JSX.Element}
- */
+import useTab from '@assets/hooks/tab/useTab';
+import {TitleBar, SaveBar, useAppBridge} from '@shopify/app-bridge-react';
+
 export default function Settings() {
+  const shopify = useAppBridge();
+
   const {loading, data: input, setData: setInput} = useFetchApi({
     url: '/settings',
     defaultData: defaultSetting
@@ -19,19 +20,12 @@ export default function Settings() {
     url: '/settings'
   });
 
-  const [selectedTab, setSelectedTab] = React.useState(0);
-
   const handleChangeInput = (key, value) => {
+    shopify.saveBar.show('save-bar');
     setInput(prev => ({...prev, [key]: value}));
   };
 
-  const handleReset = () => {
-    setInput(defaultSetting);
-  };
-
-  const handleSave = () => {
-    saveSetting(input);
-  };
+  const [selectedTab, handleTabChange] = useTab(0);
 
   const tabs = [
     {
@@ -46,7 +40,15 @@ export default function Settings() {
     }
   ];
 
-  const handleTabChange = useCallback(selectedTabIndex => setSelectedTab(selectedTabIndex), []);
+  const handleDiscard = () => {
+    setInput(defaultSetting);
+    shopify.saveBar.hide('save-bar');
+  };
+
+  const handleSave = () => {
+    saveSetting(input);
+    shopify.saveBar.hide('save-bar');
+  };
 
   return (
     <Page
@@ -60,33 +62,29 @@ export default function Settings() {
       secondaryActions={[
         {
           content: 'Reset to Default',
-          onAction: handleReset
+          onAction: handleDiscard
         }
       ]}
     >
       <Layout>
-        <Layout.Section>
-          <Grid>
-            <Grid.Cell columnSpan={{xs: 6, sm: 6, md: 6, lg: 4, xl: 4}}>
-              <BlockStack gap="400">
-                <Text as="p" variant="bodyMd" fontWeight="semibold">
-                  Preview popup notification:
-                </Text>
-                <NotificationPopup settings={input} />
-              </BlockStack>
-            </Grid.Cell>
-            <Grid.Cell columnSpan={{xs: 6, sm: 6, md: 6, lg: 8, xl: 8}}>
-              <Card>
-                <Tabs tabs={tabs} selected={selectedTab} onSelect={handleTabChange}>
-                  {tabs[selectedTab].body}
-                </Tabs>
-              </Card>
-            </Grid.Cell>
-          </Grid>
+        <Layout.Section variant={'oneThird'}>
+          <BlockStack gap="400">
+            <Text as="p" variant="bodyMd" fontWeight="semibold">
+              Preview popup notification:
+            </Text>
+            <NotificationPopup settings={input} />
+          </BlockStack>
         </Layout.Section>
+        <Layout.Section>
+          <Tabs fitted={true} tabs={tabs} selected={selectedTab} onSelect={handleTabChange} />
+          {tabs[selectedTab].body}
+        </Layout.Section>
+        <TitleBar title="Simple Sales Notification"></TitleBar>
+        <SaveBar id="save-bar">
+          <button variant="primary" onClick={handleSave} loading={loading}></button>
+          <button onClick={handleDiscard}></button>
+        </SaveBar>
       </Layout>
     </Page>
   );
 }
-
-Settings.propTypes = {};

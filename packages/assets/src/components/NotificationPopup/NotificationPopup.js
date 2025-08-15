@@ -1,5 +1,5 @@
 import React from 'react';
-import './NoticationPopup.scss';
+import './NotificationPopup.scss';
 import {string, object} from 'prop-types';
 
 const NotificationPopup = ({

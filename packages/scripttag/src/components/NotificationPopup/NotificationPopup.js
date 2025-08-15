@@ -15,7 +15,7 @@ const NotificationPopup = ({
     hideTimeAgo: false
   }
 }) => {
-  const setPosition = position => {
+  const getPositionStyle = position => {
     switch (position) {
       case 'bottom-left':
         return {bottom: '15px', left: '15px'};
@@ -36,7 +36,7 @@ const NotificationPopup = ({
   return (
     <div
       className="Avava-SP__Wrapper fadeInUp animated"
-      style={setPosition(settings.position || 'bottom-left')}
+      style={getPositionStyle(settings.position)}
     >
       <div className="Avava-SP__Inner">
         <div className="Avava-SP__Container">
@@ -53,7 +53,7 @@ const NotificationPopup = ({
               </div>
               <div className={'Avada-SP__Subtitle'}>
                 purchased{' '}
-                {settings.truncateProductName ? truncateString(productName, 15) : productName}
+                {settings.truncateProductName ? truncateString(productName, 30) : productName}
               </div>
               <div className={'Avada-SP__Footer'}>
                 {!settings.hideTimeAgo && timeAgo}{' '}

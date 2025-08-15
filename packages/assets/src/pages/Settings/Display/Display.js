@@ -5,19 +5,29 @@ import TimingSetting from '@assets/pages/Settings/Display/TimingSetting/TimingSe
 import {BlockStack} from '@shopify/polaris';
 import React from 'react';
 import PropTypes from 'prop-types';
+
 export default function Display({loading, input, handleChangeInput}) {
+  const settings = [
+    {
+      key: 'position',
+      component: PositionSetting,
+      skeleton: PositionSettingSkeleton
+    },
+    {
+      key: 'timing',
+      component: TimingSetting,
+      skeleton: TimingSettingSkeleton
+    }
+  ];
+
   return (
     <BlockStack gap="500">
-      {loading ? (
-        <>
-          <PositionSettingSkeleton />
-          <TimingSettingSkeleton />
-        </>
-      ) : (
-        <>
-          <PositionSetting handleChangeInput={handleChangeInput} input={input} />
-          <TimingSetting handleChangeInput={handleChangeInput} input={input} />
-        </>
+      {settings.map(({key, component: Component, skeleton: Skeleton}) =>
+        loading ? (
+          <Skeleton key={key} />
+        ) : (
+          <Component key={key} handleChangeInput={handleChangeInput} input={input} />
+        )
       )}
     </BlockStack>
   );

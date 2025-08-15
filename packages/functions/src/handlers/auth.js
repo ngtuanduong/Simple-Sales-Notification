@@ -8,13 +8,8 @@ import createErrorHandler from '@functions/middleware/errorHandler';
 import firebase from 'firebase-admin';
 import appConfig from '@functions/config/app';
 import shopifyOptionalScopes from '@functions/config/shopifyOptionalScopes';
-import {
-  createDefaultSetting,
-  createWebhooks,
-  registerScriptTag,
-  syncOrders,
-  initShopify
-} from '@functions/services/shopifyService';
+import {createWebhooks, syncOrders, initShopify} from '@functions/services/shopifyService';
+import {createDefaultSetting} from '@functions/services/firestoreService';
 import Shopify from 'shopify-api-node';
 if (firebase.apps.length === 0) {
   firebase.initializeApp();
@@ -70,7 +65,7 @@ app.use(
         await Promise.all([
           syncOrders(shopify, shop),
           createDefaultSetting(shop),
-          registerScriptTag(shopDomain, shopify)
+          createWebhooks(shopify)
         ]);
       } catch (error) {
         console.error('Error in afterInstall hook:', error);
@@ -87,7 +82,6 @@ app.use(
           shopName: shopDomain,
           accessToken: shopifyTmp.options.accessToken
         });
-        console.log('Recreating webhook url', shopDomain);
         await createWebhooks(shopify);
       } catch (err) {
         const body = err.response?.body;

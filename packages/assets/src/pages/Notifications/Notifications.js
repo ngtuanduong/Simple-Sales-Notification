@@ -1,6 +1,7 @@
 import React from 'react';
 import {Page, Layout, Card, BlockStack, Text} from '@shopify/polaris';
 import NotificationList from './NotificationList/NotificationList';
+
 const Notifications = () => {
   return (
     <Page title="Notifications">

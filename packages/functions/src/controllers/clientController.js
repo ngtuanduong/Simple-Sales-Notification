@@ -1,5 +1,5 @@
-import {getByDomain} from '@functions/repositories/notificationRepository';
-import {getOneByDomain} from '@functions/repositories/settingRepository';
+import * as notificationRepository from '@functions/repositories/notificationRepository';
+import * as settingRepository from '@functions/repositories/settingRepository';
 import moment from 'moment';
 
 /**
@@ -12,7 +12,10 @@ export async function getNotifications(ctx) {
   try {
     const {shop} = ctx.query;
 
-    const [notifications, setting] = await Promise.all([getByDomain(shop), getOneByDomain(shop)]);
+    const [notifications, setting] = await Promise.all([
+      notificationRepository.getByDomain(shop),
+      settingRepository.getOneByDomain(shop)
+    ]);
     const updatedNotifications = notifications.map(notification => {
       return {
         ...notification,

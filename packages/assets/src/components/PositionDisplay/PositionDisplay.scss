@@ -1,0 +1,61 @@
+.DisplayType{
+  width: 120px;
+  height: 80px;
+  border-radius: 8px;
+  border: 2px solid #d1d1d1;
+  cursor: pointer;
+  position: relative;
+}
+
+.DisplayType__Input{
+  position: absolute;
+  background-color: #d1d1d1;
+  width: 25%;
+  border-radius: 4px;
+}
+
+.DisplayType__Input--top{
+  top: 5px;
+}
+.DisplayType__Input--bottom{
+  bottom: 5px;
+}
+.DisplayType__Input--right{
+  right: 5px;
+}
+.DisplayType__Input--left{
+  left: 5px;
+}
+
+.DisplayType__Input--popup{
+  height: 15%;
+}
+
+.DisplayType__Input--bottom-left{
+  @extend .DisplayType__Input--bottom;
+  @extend .DisplayType__Input--left;
+}
+
+.DisplayType__Input--bottom-right{
+  @extend .DisplayType__Input--bottom;
+  @extend .DisplayType__Input--right;
+}
+
+.DisplayType__Input--top-left{
+  @extend .DisplayType__Input--top;
+  @extend .DisplayType__Input--left;
+}
+
+.DisplayType__Input--top-right{
+  @extend .DisplayType__Input--top;
+  @extend .DisplayType__Input--right;
+}
+
+
+.DisplayType--selected{
+  border: 2px solid #06038d;
+}
+
+.DisplayType__Input--selected{
+  background-color: #06038d;
+}

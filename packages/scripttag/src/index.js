@@ -1,7 +1,7 @@
 import DisplayManager from './managers/DisplayManager.js';
 import ApiManager from './managers/ApiManager.js';
 
-console.log('This is the script tag');
+console.log('Avada Sale Pop initialized!');
 
 (async () => {
   const apiManager = new ApiManager();

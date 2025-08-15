@@ -2,6 +2,7 @@ import {insertAfter} from '../helpers/insertHelpers.js';
 import {render} from 'preact';
 import React from 'preact/compat';
 import NotificationPopup from '../components/NotificationPopup/NotificationPopup.js';
+
 export default class DisplayManager {
   constructor() {
     this.notifications = [];
@@ -15,15 +16,16 @@ export default class DisplayManager {
     // display logic
     if (!this.shouldDisplay()) return;
     // Delay before first pop
-    await this.sleep(settings.firstDelay || 0);
+    await this.sleep(this.settings.firstDelay);
+
     for (const notification of notifications) {
       await this.display(notification);
 
-      await this.sleep(this.settings.duration || 5);
+      await this.sleep(this.settings.duration);
 
       this.fadeOut();
 
-      await this.sleep(this.settings.popsInterval || 2);
+      await this.sleep(this.settings.popsInterval);
     }
   }
 
@@ -58,18 +60,17 @@ export default class DisplayManager {
   }
 
   shouldDisplay() {
-    const url = window.location.href;
+    const url = window.location.protocol + '//' + window.location.host + window.location.pathname;
 
-    const {allowShow = 'all', includedUrls = '', excludedUrls = ''} = this.settings;
+    const {allowShow, includedUrls, excludedUrls} = this.settings;
 
     const includedUrlsArray = includedUrls.split('\n');
     const excludedUrlsArray = excludedUrls.split('\n');
 
     if (excludedUrlsArray.includes(url)) return false;
-
     if (allowShow === 'all') return true;
-
     if (allowShow === 'specific') return includedUrlsArray.includes(url);
+
     return false;
   }
 }

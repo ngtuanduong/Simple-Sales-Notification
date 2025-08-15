@@ -1,48 +1,43 @@
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 import {FormLayout, Select, TextField} from '@shopify/polaris';
 import {object, bool, func} from 'prop-types';
+import TriggerPageOptions from '@assets/const/TriggerPageOptions';
+
 export default function Trigger({input, handleChangeInput, loading}) {
-  const [selected, setSelected] = useState('all');
-  const handleSelectChange = useCallback(value => setSelected(value), []);
-  const options = [
-    {label: 'All pages', value: 'all'},
-    {label: 'Specific pages', value: 'specific'}
-  ];
+  const options = TriggerPageOptions;
+  const LINE_NUMBER = 4;
 
   return (
-    <>
-      <FormLayout>
-        <Select
-          label="Page restriction"
-          options={options}
-          onChange={value => {
-            handleSelectChange(value);
-            handleChangeInput('allowShow', value);
-          }}
-          value={selected}
-        />
-        {input.allowShow === 'specific' && (
-          <TextField
-            label="Included pages"
-            value={input.includedUrls}
-            onChange={value => handleChangeInput('includedUrls', value)}
-            helpText="Pages URLs show the pop-up (seperated by new lines)"
-            multiline={4}
-            autoComplete="off"
-            loading={loading}
-          />
-        )}
+    <FormLayout>
+      <Select
+        label="Page restriction"
+        options={Object.values(options)}
+        onChange={value => {
+          handleChangeInput('allowShow', value);
+        }}
+        value={input.allowShow}
+      />
+      {input.allowShow === options.SPECIFIC_PAGES.value && (
         <TextField
-          label="Excluded pages"
-          value={input.excludedUrls}
-          onChange={value => handleChangeInput('excludedUrls', value)}
-          helpText="Pages URLs NOT to show the pop-up (seperated by new lines)"
-          multiline={4}
+          label="Included pages"
+          value={input.includedUrls}
+          onChange={value => handleChangeInput('includedUrls', value)}
+          helpText="Pages URLs show the pop-up (seperated by new lines)"
+          multiline={LINE_NUMBER}
           autoComplete="off"
           loading={loading}
         />
-      </FormLayout>
-    </>
+      )}
+      <TextField
+        label="Excluded pages"
+        value={input.excludedUrls}
+        onChange={value => handleChangeInput('excludedUrls', value)}
+        helpText="Pages URLs NOT to show the pop-up (seperated by new lines)"
+        multiline={LINE_NUMBER}
+        autoComplete="off"
+        loading={loading}
+      />
+    </FormLayout>
   );
 }
 
