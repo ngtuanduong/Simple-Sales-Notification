@@ -17,7 +17,7 @@ export default function TimingSetting({input, handleChangeInput}) {
               max={30}
               step={1}
               output
-              // helpText={`First popup will visible after ${input.firstDelay} seconds`}
+              helpText={`First popup will visible after ${input.firstDelay} seconds`}
             />
           </Grid.Cell>
           <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 3, lg: 6, xl: 6}}>
@@ -29,7 +29,7 @@ export default function TimingSetting({input, handleChangeInput}) {
               max={30}
               step={1}
               output
-              // helpText={`Popup will stay visible for ${input.duration} seconds`}
+              helpText={`Popup will stay visible for ${input.displayDuration} seconds`}
             />
           </Grid.Cell>
           <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 3, lg: 6, xl: 6}}>
@@ -41,7 +41,7 @@ export default function TimingSetting({input, handleChangeInput}) {
               max={60}
               step={1}
               output
-              // helpText={`Wait ${input.popsInterval} seconds before showing next popup`}
+              helpText={`Wait ${input.popsInterval} seconds before showing next popup`}
             />
           </Grid.Cell>
           <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 3, lg: 6, xl: 6}}>
@@ -53,7 +53,7 @@ export default function TimingSetting({input, handleChangeInput}) {
               max={50}
               step={1}
               output
-              // helpText={`Show maximum ${input.maxPopsDisplay} popups per session`}
+              helpText={`Show maximum ${input.maxPopsDisplay} popups per session`}
             />
           </Grid.Cell>
         </Grid>
