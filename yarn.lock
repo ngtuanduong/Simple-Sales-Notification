@@ -131,9 +131,9 @@ __metadata:
   resolution: "@avada/app@workspace:."
   dependencies:
     "@avada/console": "npm:1.0.0"
-    "@avada/core": "npm:3.3.19"
     "@shopify/cli": "npm:3.80.7-alpha.10"
     babel-jest: "npm:^24.9.0"
+    clsx: "npm:^2.1.1"
     concurrently: "npm:^7.6.0"
     delay-cli: "npm:2.0.0"
     eslint: "npm:^6.3.0"
@@ -8005,6 +8005,13 @@ __metadata:
     process-nextick-args: "npm:^2.0.0"
     readable-stream: "npm:^2.3.5"
   checksum: 10c0/52db2904dcfcd117e4e9605b69607167096c954352eff0fcded0a16132c9cfc187b36b5db020bee2dc1b3a968ca354f8b30aef3d8b4ea74e3ea83a81d43e47bb
+  languageName: node
+  linkType: hard
+
+"clsx@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "clsx@npm:2.1.1"
+  checksum: 10c0/c4c8eb865f8c82baab07e71bfa8897c73454881c4f99d6bc81585aecd7c441746c1399d08363dc096c550cceaf97bd4ce1e8854e1771e9998d9f94c4fe075839
   languageName: node
   linkType: hard
 

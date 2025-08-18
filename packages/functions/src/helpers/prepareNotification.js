@@ -14,6 +14,6 @@ export default function prepareNotification(shop, order) {
     productName: order.lineItems.edges[0]?.node.name || '',
     productId: order.lineItems.edges[0].node.product.id || '',
     productImage: order.lineItems.edges[0]?.node.product.images?.edges[0]?.node.originalSrc || '',
-    createdAt: new Date()
+    createdAt: new Date(order.createdAt)
   };
 }

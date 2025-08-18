@@ -3,7 +3,7 @@
 client_id = "49da59fd7b0db0b1e1966e6198967ce0"
 name = "Avada-app-test"
 handle = "avada-app-test-10"
-application_url = "https://news-agree-forty-peoples.trycloudflare.com/auth/shopify"
+application_url = "https://address-cable-which-enough.trycloudflare.com/auth/shopify"
 embedded = true
 
 [webhooks]
@@ -11,10 +11,10 @@ api_version = "2025-07"
 
 [auth]
 redirect_urls = [
-  "https://news-agree-forty-peoples.trycloudflare.com/auth/shopify/callback",
-  "https://news-agree-forty-peoples.trycloudflare.com/authSa/shopify/callback",
-  "https://news-agree-forty-peoples.trycloudflare.com/auth/shopify/embed/callback",
-  "https://news-agree-forty-peoples.trycloudflare.com/auth/shopify/embed/callback/updateScopes",
+  "https://address-cable-which-enough.trycloudflare.com/auth/shopify/callback",
+  "https://address-cable-which-enough.trycloudflare.com/authSa/shopify/callback",
+  "https://address-cable-which-enough.trycloudflare.com/auth/shopify/embed/callback",
+  "https://address-cable-which-enough.trycloudflare.com/auth/shopify/embed/callback/updateScopes",
   "https://localhost:3000/auth/shopify/callback",
   "https://localhost:3000/authSa/shopify/callback",
   "https://localhost:3000/auth/shopify/embed/callback"

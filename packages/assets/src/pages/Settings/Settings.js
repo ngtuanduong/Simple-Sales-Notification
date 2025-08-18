@@ -7,22 +7,27 @@ import NotificationPopup from '@assets/components/NotificationPopup/Notification
 import Display from '@assets/pages/Settings/Display/Display';
 import Trigger from '@assets/pages/Settings/Trigger/Trigger';
 import useTab from '@assets/hooks/tab/useTab';
-import {TitleBar, SaveBar, useAppBridge} from '@shopify/app-bridge-react';
+import {TitleBar, SaveBar} from '@shopify/app-bridge-react';
+import useSaveBar from '@assets/hooks/saveBar/useSaveBar';
 
 export default function Settings() {
-  const shopify = useAppBridge();
-
   const {loading, data: input, setData: setInput} = useFetchApi({
     url: '/settings',
     defaultData: defaultSetting
   });
-  const {editing, handleEdit: saveSetting} = useEditApi({
+  const {handleEdit: saveSetting} = useEditApi({
     url: '/settings'
   });
 
+  const {discard, save, loading: saveLoading, showSaveBar} = useSaveBar({
+    input,
+    setInput,
+    saveSetting
+  });
+
   const handleChangeInput = (key, value) => {
-    shopify.saveBar.show('save-bar');
     setInput(prev => ({...prev, [key]: value}));
+    showSaveBar();
   };
 
   const [selectedTab, handleTabChange] = useTab(0);
@@ -40,33 +45,13 @@ export default function Settings() {
     }
   ];
 
-  const handleDiscard = () => {
-    setInput(defaultSetting);
-    shopify.saveBar.hide('save-bar');
-  };
-
-  const handleSave = () => {
-    saveSetting(input);
-    shopify.saveBar.hide('save-bar');
-  };
-
   return (
-    <Page
-      title="Notification Settings"
-      subtitle="Customize your popup notification preferences"
-      primaryAction={{
-        content: 'Save',
-        onAction: handleSave,
-        loading: editing
-      }}
-      secondaryActions={[
-        {
-          content: 'Reset to Default',
-          onAction: handleDiscard
-        }
-      ]}
-    >
+    <Page title="Notification Settings" subtitle="Customize your popup notification preferences">
       <Layout>
+        <SaveBar id="save-bar">
+          <button variant="primary" onClick={save} loading={saveLoading}></button>
+          <button onClick={discard}></button>
+        </SaveBar>
         <Layout.Section variant={'oneThird'}>
           <BlockStack gap="400">
             <Text as="p" variant="bodyMd" fontWeight="semibold">
@@ -80,10 +65,7 @@ export default function Settings() {
           {tabs[selectedTab].body}
         </Layout.Section>
         <TitleBar title="Simple Sales Notification"></TitleBar>
-        <SaveBar id="save-bar">
-          <button variant="primary" onClick={handleSave} loading={loading}></button>
-          <button onClick={handleDiscard}></button>
-        </SaveBar>
+        <Layout.Section></Layout.Section>
       </Layout>
     </Page>
   );

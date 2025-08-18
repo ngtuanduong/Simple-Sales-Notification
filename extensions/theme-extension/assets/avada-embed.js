@@ -1,5 +1,5 @@
 (function() {
-  const BASE_URL = 'https://news-agree-forty-peoples.trycloudflare.com/scripttag';
+  const BASE_URL = 'https://address-cable-which-enough.trycloudflare.com/scripttag';
 
   const scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';

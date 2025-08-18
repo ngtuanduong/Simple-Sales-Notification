@@ -43,7 +43,7 @@ export async function create(dataList) {
 export async function get({shopId, after, before, limit = 10, withDocs, hasCount}) {
   let queriedRef = collection;
   queriedRef = queriedRef.where('shopId', '==', shopId);
-  queriedRef = queriedRef.orderBy('created_at', 'desc');
+  queriedRef = queriedRef.orderBy('createdAt', 'desc');
 
   return await paginateQuery({
     queriedRef,

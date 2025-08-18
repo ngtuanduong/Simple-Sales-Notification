@@ -1,12 +1,12 @@
 import React from 'react';
-import {Text, ResourceItem, InlineStack, BlockStack} from '@shopify/polaris';
+import {Text, ResourceItem, InlineStack} from '@shopify/polaris';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
+import NotificationPopup from '@assets/components/NotificationPopup/NotificationPopup';
 
 const NotificationItem = ({data}) => {
-  const formattedDate = moment(data.timestamp)
-    .tz('Asia/Ho_Chi_Minh')
-    .format('HH:mm DD/MM/YYYY');
+  const fromNow = moment(data.createdAt).fromNow();
+  const formattedDate = moment(data.createdAt).format('HH:MM MMM DD, YYYY');
   return (
     <ResourceItem id={data.id}>
       <InlineStack
@@ -16,29 +16,10 @@ const NotificationItem = ({data}) => {
         blockAlign="center"
         style={{padding: '12px 0'}}
       >
-        <InlineStack gap="300" blockAlign="center">
-          <img
-            src={data.productImage || '/image/placeholder-image.jpg'}
-            alt={data.productName}
-            width={48}
-            height={48}
-            style={{
-              borderRadius: 6,
-              objectFit: 'cover',
-              boxShadow: '0 1px 4px rgba(0,0,0,0.08)'
-            }}
-          />
-          <BlockStack gap="050">
-            <Text as={'p'} variant="bodyMd" fontWeight="medium">
-              {data.productName}
-            </Text>
-            <Text as={'p'} variant="bodySm" tone="subdued" >
-              Purchased by {data.firstName}
-            </Text>
-          </BlockStack>
-        </InlineStack>
-
+        <NotificationPopup {...data} timeAgo={fromNow} />
         <Text as={'p'} variant="bodySm" tone="subdued">
+          Created at
+          <br />
           {formattedDate}
         </Text>
       </InlineStack>
